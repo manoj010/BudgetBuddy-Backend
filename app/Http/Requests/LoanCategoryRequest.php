@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\AppResponse;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CategoryRequest extends FormRequest
+class LoanCategoryRequest extends FormRequest
 {
+    use AppResponse;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -28,8 +31,8 @@ class CategoryRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('income_categories', 'title')
-                    ->ignore($this->income_category)
+                Rule::unique('loan_categories', 'title')
+                    ->ignore($this->loan_category)
                     ->where(function ($query) use ($userId) {
                         $query->where('created_by', $userId);
                     })

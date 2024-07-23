@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('income_categories', function (Blueprint $table) {
+        Schema::create('saving_categories', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->longText('description')->nullable();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('income_categories');
+        Schema::dropIfExists('saving_categories');
     }
 };

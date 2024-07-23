@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Dotenv\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class BaseController extends Controller

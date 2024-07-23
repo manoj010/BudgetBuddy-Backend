@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\IncomeCategoryController;
+use App\Http\Controllers\LoanCategoryController;
+use App\Http\Controllers\SavingCategoryController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,5 +24,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('income-category', IncomeCategoryController::class);
+    Route::apiResource('expense-category', ExpenseCategoryController::class);
+    Route::apiResource('saving-category', SavingCategoryController::class);
+    Route::apiResource('loan-category', LoanCategoryController::class);
 });
 

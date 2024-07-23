@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\AppResponse;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AuthRequest extends FormRequest
 {
+    use AppResponse;
+    
     /**
      * Determine if the user is authorized to make this request.
      */
