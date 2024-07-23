@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Dotenv\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class BaseController extends Controller
@@ -61,13 +59,12 @@ class BaseController extends Controller
         return null;
     }
 
-    public function notFound($status = 'error', $code = Response::HTTP_NOT_FOUND)
+    public function notFound($status = Response::HTTP_NOT_FOUND)
     {
         return response()->json([
-            'status' => $status,
-            'code' => $code,
+            'status' => 'error', 
             'message' => 'Resource not Found'
-        ], $code);
+        ], $status);
         return null;
     }
 }

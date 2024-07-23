@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ExpenseRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class ExpenseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +22,20 @@ class ExpenseRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = auth()->id();
+
         return [
-            //
+            'amount' => 'required|numeric|min:0',
+            'category_id' => [
+                'required',
+                Rule::exists('expense_categories', 'id')->where(function ($query) use ($userId) {
+                    $query->where('created_by', $userId)
+                        ->whereNull('archived_at');
+                }),
+            ],
+            'date_spent' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'is_recurring' => 'required|boolean',
         ];
     }
 }
