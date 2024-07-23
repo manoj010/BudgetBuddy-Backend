@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 
 class BaseController extends Controller
 {
@@ -21,7 +19,53 @@ class BaseController extends Controller
     {
         return response()->json([
             'status' => 'error',
-            'message' => 'An error occurred: ' . $e->getMessage(),
+            'message' => 'An error occurred: ' . $e,
         ], $status);
+    }
+
+    protected function checkOrFindResource($resource, $id = null, $message = 'Resource not found', $status = Response::HTTP_NOT_FOUND)
+    {
+        $userId = auth()->id();
+        if ($id) {
+            $resource = $resource->where('created_by', $userId)->find($id);
+            if (!$resource) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $message
+                ], $status);
+            }
+        } else {
+            $resources = $resource->where('created_by', $userId)->get();
+            if ($resources->isEmpty()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $message
+                ], $status);
+            }
+            return $resources;
+        }
+        return $resource;
+    }
+    
+    protected function checkOwnership($resource, $message = 'Permission Denied.', $status = Response::HTTP_FORBIDDEN)
+    {
+        $user = auth()->user();
+        if ($resource->created_by !== $user->id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $message
+            ], $status);
+        }
+        return null;
+    }
+
+    public function notFound($status = 'error', $code = Response::HTTP_NOT_FOUND)
+    {
+        return response()->json([
+            'status' => $status,
+            'code' => $code,
+            'message' => 'Resource not Found'
+        ], $code);
+        return null;
     }
 }
