@@ -29,9 +29,4 @@ class BaseModel extends Model
             }
         });
     }
-
-    public function category()
-    {
-        return $this->belongsTo(IncomeCategory::class);
-    } 
 }

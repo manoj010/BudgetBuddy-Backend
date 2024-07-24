@@ -14,6 +14,15 @@ class ExpenseResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $expense = $this->resource;
+        return [
+            'id' => $expense->id,
+            'category_id' => $expense->category_id,
+            'category_title' => $expense->category->title,
+            'date_spent' => $expense->date_spent, 
+            'amount' => $expense->amount,
+            'notes' => $expense->notes,
+            'is_recurring' => $expense->is_recurring
+        ];
     }
 }

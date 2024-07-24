@@ -7,8 +7,8 @@ use App\Http\Controllers\IncomeCategoryController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoanCategoryController;
 use App\Http\Controllers\SavingCategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
-use App\Models\Expense;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:api')->prefix('setup')->group(function () {
     Route::apiResource('income-category', IncomeCategoryController::class);
     Route::apiResource('expense-category', ExpenseCategoryController::class);
     Route::apiResource('saving-category', SavingCategoryController::class);
@@ -35,3 +35,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('expense', ExpenseController::class);
 });
 
+Route::middleware('auth:api')->prefix('dashboard')->group(function () {
+    Route::get('/total', [DashboardController::class, 'total']);
+    Route::get('/total-by-month', [DashboardController::class, 'totalByMonth']);
+});

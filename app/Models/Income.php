@@ -9,4 +9,11 @@ class Income extends BaseModel
     use HasFactory;
 
     protected $fillable = ['category_id', 'amount', 'date_received', 'notes'];
+
+    public function category()
+    {
+        return $this->belongsTo(IncomeCategory::class);
+    } 
 }
+
+

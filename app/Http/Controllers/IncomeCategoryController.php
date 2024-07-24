@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\IncomeCategoryRequest;
 use App\Models\IncomeCategory;
 
 class IncomeCategoryController extends BaseCategoryController
@@ -19,7 +19,7 @@ class IncomeCategoryController extends BaseCategoryController
         return $this->allResource($this->incomeCategory);
     }
     
-    public function store(CategoryRequest $request)
+    public function store(IncomeCategoryRequest $request)
     {
         $validatedData = $request->validated();
         return $this->createResource($validatedData, $this->incomeCategory);
@@ -30,7 +30,7 @@ class IncomeCategoryController extends BaseCategoryController
         return $this->specificResource($this->incomeCategory, $id);
     }
 
-    public function update(CategoryRequest $request, $id)
+    public function update(IncomeCategoryRequest $request, $id)
     {
         $resource = $this->incomeCategory->find($id);
         if (!$resource) {
