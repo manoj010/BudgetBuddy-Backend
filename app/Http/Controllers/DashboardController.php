@@ -2,27 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\functions;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends BaseController
 {
     public function total()
     {
-        $totalIncome = DB::table('incomes')
-            ->where('created_by', auth()->id())
-            ->sum('amount');
-
-        $totalExpense = DB::table('expenses')
-            ->where('created_by', auth()->id())
-            ->sum('amount');
-
-        $balance = $totalIncome - $totalExpense;
-
-        return response()->json([
-            'total_income' => $totalIncome,
-            'total_expense' => $totalExpense,
-            'profit_loss' => $balance
-        ]);
+        $financialSummary = functions::userBalance();
+        return response()->json($financialSummary);
     }
 
     public function totalByMonth()
@@ -49,13 +37,13 @@ class DashboardController extends BaseController
 
             $totalIncome = $income ? $income->total_income : 0;
             $totalExpense = $expense ? $expense->total_expense : 0;
-            $profitLoss = $totalIncome - $totalExpense;
+            $balance = $totalIncome - $totalExpense;
 
             $results[] = [
                 'month' => $i,
                 'total_income' => $totalIncome,
                 'total_expense' => $totalExpense,
-                'profit_loss' => $profitLoss
+                'profit_loss' => $balance
             ];
         }
 

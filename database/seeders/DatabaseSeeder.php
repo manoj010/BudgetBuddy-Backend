@@ -13,8 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
+        //     'id' => 0,
+        //     'username' => 'default',
+        //     'email' => 'default@example.com',
+        //     'password' => bcrypt('12345678'),
         // ]);
         // $this->call(IncomeCategoriesTableSeeder::class);
     }

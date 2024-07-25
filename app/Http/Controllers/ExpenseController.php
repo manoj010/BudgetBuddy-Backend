@@ -6,6 +6,7 @@ use App\Http\Requests\ExpenseRequest;
 use App\Http\Resources\ExpenseCollection;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
+use App\Models\UserBalance;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +31,10 @@ class ExpenseController extends BaseController
             DB::beginTransaction();
             $validatedData = $request->validated();
             $expense = $this->expense::create($validatedData);
+            $balance = UserBalance::firstOrNew();
+            $balance->total_expense += $expense->amount;
+            $balance->balance = $balance->total_income - $balance->total_expense;
+            $balance->save();
             DB::commit();
             return $this->success(new ExpenseResource($expense), 'Expense created successfully', Response::HTTP_CREATED);
         } catch (\Exception $e) {

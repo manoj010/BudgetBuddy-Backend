@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends BaseController
 {
-    // public function __construct()
-    // {
-    //     dd('test');
-    // }
+    public function __construct()
+    {
+        // dd('test');
+    }
 
     public function login(AuthRequest $request)
     {

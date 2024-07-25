@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CategoryHelper;
+use App\Helpers\functions;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,6 +27,8 @@ class UserController extends BaseController
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
+            Auth::login($user);
+            functions::createDefaultCategories();
             DB::commit();
             return $this->success('User created successfully', $user, Response::HTTP_CREATED);
         } catch (\Exception $e) {
