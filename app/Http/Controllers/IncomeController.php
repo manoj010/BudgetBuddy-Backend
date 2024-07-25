@@ -6,6 +6,7 @@ use App\Http\Requests\IncomeRequest;
 use App\Http\Resources\IncomeCollection;
 use App\Http\Resources\IncomeResource;
 use App\Models\Income;
+use App\Models\UserBalance;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +31,10 @@ class IncomeController extends BaseController
             DB::beginTransaction();
             $validatedData = $request->validated();
             $income = $this->income::create($validatedData);
+            $balance = UserBalance::firstOrNew();
+            $balance->total_income += $income->amount; 
+            $balance->balance = $balance->total_income - $balance->total_expense;
+            $balance->save();
             DB::commit();
             return $this->success(new IncomeResource($income), 'Income created successfully', Response::HTTP_CREATED);
         } catch (\Exception $e) {

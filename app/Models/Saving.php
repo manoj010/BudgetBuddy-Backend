@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class SavingCategory extends BaseCategory
+class Saving extends BaseModel
 {
     use HasFactory;
+
+    protected $fillable = ['amount', 'date_saved', 'notes'];
 }
