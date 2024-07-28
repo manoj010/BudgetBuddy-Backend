@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('user_balances', function (Blueprint $table) {
             $table->id();
-            $table->defaultInfos();
+            $table->decimal('balance', 10, 2)->default(0);
             $table->decimal('total_income', 10, 2)->default(0);
             $table->decimal('total_expense', 10, 2)->default(0);
             $table->decimal('total_saving', 10, 2)->default(0);
             $table->decimal('total_withdraw', 10, 2)->default(0);
-            $table->decimal('balance', 10, 2)->default(0);
+            $table->defaultInfos();
             $table->timestamps();
         });
     }
