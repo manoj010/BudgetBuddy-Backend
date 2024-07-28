@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IncomeRequest;
-use App\Http\Resources\IncomeCollection;
-use App\Http\Resources\IncomeResource;
-use App\Models\Income;
-use App\Models\UserBalance;
+use App\Http\Resources\{IncomeCollection, IncomeResource};
+use App\Models\{Income, UserBalance};
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
