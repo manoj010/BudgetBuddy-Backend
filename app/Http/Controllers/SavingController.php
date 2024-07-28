@@ -29,37 +29,25 @@ class SavingController extends BaseController
     { 
         try {
             DB::beginTransaction();
-
             $validatedData = $request->validated();
-            $validatedData['type'] = 'save';
-            $type = $validatedData['type'];
-            dd($validatedData);
+
+            $balance = UserBalance::where('created_by', auth()->id())->firstOrNew();
+        
+            if ($balance->balance < $validatedData['amount']) {
+                DB::rollBack();
+                return $this->error('Insufficient balance to save this amount.', Response::HTTP_BAD_REQUEST);
+            }
+
             $save = $this->saving::create($validatedData);
-            $this->updateUserBalance($type, $validatedData['amount']);
+            $balance = UserBalance::firstOrNew();
+            $balance->total_saving += $save->amount;
+            $balance->balance = $balance->total_income - $balance->total_expense - $balance->total_saving;
+            $balance->save();
             DB::commit();
             return $this->success(new SavingResource($save), 'Amount Saved', Response::HTTP_CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->error($e->getMessage());
         }
-    }
-
-    protected function updateUserBalance($type, $amount)
-    {
-        $userBalance = UserBalance::where('created_by', auth()->id())->first();
-        if (!$userBalance) {
-            throw new \Exception('User balance not found.');
-        }
-        switch ($type) {
-            case 'saving':
-                $userBalance->balance += $amount;
-                break;
-            case 'withdraw':
-                $userBalance->balance -= $amount;
-                break;
-            default:
-                throw new \Exception('Invalid transaction type.');
-        }
-        $userBalance->save();
     }
 }

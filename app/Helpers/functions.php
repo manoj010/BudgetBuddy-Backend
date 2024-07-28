@@ -24,14 +24,14 @@ class functions
         ];
 
         foreach ($incomeCategories as $category) {
-            IncomeCategory::firstOrCreate([
+            IncomeCategory::create([
                 'title' => $category['title'],
                 'description' => $category['description'],
             ]);
         }
 
         foreach ($expenseCategories as $category) {
-            ExpenseCategory::firstOrCreate([
+            ExpenseCategory::create([
                 'title' => $category['title'],
                 'description' => $category['description'],
             ]);
