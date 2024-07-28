@@ -36,7 +36,14 @@ Route::middleware('auth:api')->prefix('setup')->group(function () {
     Route::apiResource('saving', SavingController::class);
     Route::apiResource('withdraw', WithdrawController::class);
 });
- 
+
+Route::middleware('auth:api')->prefix('transaction')->group(function () {
+    Route::apiResource('income', IncomeController::class);
+    Route::apiResource('expense', ExpenseController::class);
+    Route::apiResource('saving', SavingController::class);
+    Route::apiResource('withdraw', WithdrawController::class);
+});
+
 Route::middleware('auth:api')->prefix('dashboard')->group(function () {
     Route::get('/total', [DashboardController::class, 'total']);
     Route::get('/total-by-month', [DashboardController::class, 'totalByMonth']);

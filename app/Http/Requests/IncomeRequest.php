@@ -38,6 +38,7 @@ class IncomeRequest extends FormRequest
             ],
             'date_received' => 'nullable|date',
             'notes' => 'nullable|string',
+            'is_recurring' => 'required|boolean',
         ];
     }
 }

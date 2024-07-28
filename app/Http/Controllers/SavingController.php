@@ -41,7 +41,7 @@ class SavingController extends BaseController
             $save = $this->saving::create($validatedData);
             $balance = UserBalance::firstOrNew();
             $balance->total_saving += $save->amount;
-            $balance->balance = $balance->total_income - $balance->total_expense - $balance->total_saving;
+            $balance->balance -= $save->amount;
             $balance->save();
             DB::commit();
             return $this->success(new SavingResource($save), 'Amount Saved', Response::HTTP_CREATED);

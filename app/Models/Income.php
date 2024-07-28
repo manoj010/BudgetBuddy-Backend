@@ -8,7 +8,7 @@ class Income extends BaseModel
 {
     use HasFactory;
 
-    protected $fillable = ['category_id', 'amount', 'date_received', 'notes'];
+    protected $fillable = ['category_id', 'amount', 'date_received', 'notes', 'is_recurring'];
 
     public function category()
     {

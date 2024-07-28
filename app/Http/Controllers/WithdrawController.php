@@ -43,7 +43,7 @@ class WithdrawController extends BaseController
             $balance = UserBalance::firstOrNew();
             $balance->total_withdraw += $withdraw->amount;
             $balance->total_saving -= $withdraw->amount;
-            $balance->balance = $balance->total_income - $balance->total_expense - $balance->total_saving + $balance->total_withdraw;
+            $balance->balance += $withdraw->amount;
             $balance->save();
             DB::commit();
             return $this->success(new WithdrawResource($withdraw), 'Amount Withdrawn', Response::HTTP_CREATED);
