@@ -14,6 +14,13 @@ class BaseCategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $category = $this->resource;
+        return [
+            'id' => $category->id,
+            'title' => $category->title,
+            'description' => $category->description,
+            'created_at' => $category->created_at,
+            'updated_at' => $category->updated_at
+        ];
     }
 }

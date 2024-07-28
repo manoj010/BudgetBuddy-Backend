@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\functions;
+use App\Http\Resources\DashboardResource;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class DashboardController extends BaseController
 {
     public function total()
     {
-        $financialSummary = functions::userBalance();
-        return response()->json($financialSummary);
+        $financialSummary = DB::table('user_balances')
+            ->where('created_by', auth()->id())
+            ->first();
+        return $this->success(new DashboardResource($financialSummary), 'Summary', Response::HTTP_CREATED);
     }
 
+    //income and expense total by month
     public function totalByMonth()
     {
         $incomeByMonth = DB::table('incomes')
@@ -37,13 +41,11 @@ class DashboardController extends BaseController
 
             $totalIncome = $income ? $income->total_income : 0;
             $totalExpense = $expense ? $expense->total_expense : 0;
-            $balance = $totalIncome - $totalExpense;
 
             $results[] = [
                 'month' => $i,
                 'total_income' => $totalIncome,
                 'total_expense' => $totalExpense,
-                'profit_loss' => $balance
             ];
         }
 

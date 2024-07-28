@@ -33,7 +33,7 @@ class IncomeController extends BaseController
             $income = $this->income::create($validatedData);
             $balance = UserBalance::firstOrNew();
             $balance->total_income += $income->amount; 
-            $balance->balance = $balance->total_income - $balance->total_expense;
+            $balance->balance += $income->amount;
             $balance->save();
             DB::commit();
             return $this->success(new IncomeResource($income), 'Income created successfully', Response::HTTP_CREATED);

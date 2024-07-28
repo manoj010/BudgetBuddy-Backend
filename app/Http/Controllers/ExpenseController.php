@@ -33,7 +33,7 @@ class ExpenseController extends BaseController
             $expense = $this->expense::create($validatedData);
             $balance = UserBalance::firstOrNew();
             $balance->total_expense += $expense->amount;
-            $balance->balance = $balance->total_income - $balance->total_expense;
+            $balance->balance -= $expense->amount;
             $balance->save();
             DB::commit();
             return $this->success(new ExpenseResource($expense), 'Expense created successfully', Response::HTTP_CREATED);

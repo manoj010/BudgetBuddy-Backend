@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\AmountGreaterThanBalance;
 use App\Traits\AppResponse;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SavingRequest extends FormRequest
+class WithdrawRequest extends FormRequest
 {
     use AppResponse;
 

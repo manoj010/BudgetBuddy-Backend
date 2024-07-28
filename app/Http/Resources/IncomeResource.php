@@ -17,11 +17,11 @@ class IncomeResource extends JsonResource
         $income = $this->resource;
         return [
             'id' => $income->id,
-            'category_id' => $income->category_id,
             'category_title' => $income->category->title,
             'date_received' => $income->date_received, 
             'amount' => $income->amount,
-            'notes' => $income->notes
+            'notes' => $income->notes,
+            'is_recurring' => $income->is_recurring
         ];
     }
 }

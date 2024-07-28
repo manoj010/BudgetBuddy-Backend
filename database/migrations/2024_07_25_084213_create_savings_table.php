@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id();
             $table->decimal('amount', 10, 2);
             $table->date('date_saved')->default(DB::raw('CURRENT_DATE'));
-            $table->enum('type', ['save', 'withdraw']); 
             $table->longText('notes')->nullable();
+            $table->string('type')->default('saving');
             $table->defaultInfos();
             $table->timestamps();
         });

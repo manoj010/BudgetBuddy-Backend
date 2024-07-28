@@ -12,14 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('incomes', function (Blueprint $table) {
+        Schema::create('withdraws', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained('income_categories')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
-            $table->date('date_received')->default(DB::raw('CURRENT_DATE'));
+            $table->date('date_saved')->default(DB::raw('CURRENT_DATE'));
             $table->longText('notes')->nullable();
-            $table->boolean('is_recurring')->default(false);
-            $table->string('type')->default('income');
+            $table->string('type')->default('withdraw');
             $table->defaultInfos();
             $table->timestamps();
         });
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('incomes');
+        Schema::dropIfExists('withdraws');
     }
 };
