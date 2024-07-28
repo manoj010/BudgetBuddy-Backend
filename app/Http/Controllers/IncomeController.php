@@ -32,7 +32,7 @@ class IncomeController extends BaseController
             $validatedData = $request->validated();
             $income = $this->income::create($validatedData);
             $balance = UserBalance::firstOrNew();
-            $balance->total_income += $income->amount; 
+            $balance->total_income += $income->amount;
             $balance->balance += $income->amount;
             $balance->save();
             DB::commit();
@@ -62,7 +62,14 @@ class IncomeController extends BaseController
         $this->checkOwnership($income);
         try {
             DB::beginTransaction();
+            $prevAmount = $income->amount;
+            $newAmount = $request->validated()['amount'];
+            $amountDifference = $newAmount - $prevAmount;
             $income->update($request->validated());
+            $balance = UserBalance::firstOrNew();
+            $balance->total_income += $amountDifference;
+            $balance->balance += $amountDifference;
+            $balance->save();
             DB::commit();
             return $this->success(new IncomeResource($income), 'Income updated Successfully', Response::HTTP_OK);
         } catch (\Exception $e) {
@@ -76,6 +83,10 @@ class IncomeController extends BaseController
         $this->checkOwnership($income);
         try {
             DB::beginTransaction();
+            $balance = UserBalance::firstOrNew();
+            $balance->total_income -= $income->amount;
+            $balance->balance -= $income->amount;
+            $balance->save();
             $income->delete();
             DB::commit();
             return $this->success('Income deleted Successfully', Response::HTTP_OK);

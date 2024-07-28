@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\CategoryHelper;
 use App\Helpers\functions;
 use App\Http\Requests\UserRequest;
 use App\Models\User;

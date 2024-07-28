@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\IncomeCategory;
 use App\Models\ExpenseCategory;
+use App\Models\LoanCategory;
 use Illuminate\Support\Facades\DB;
 
 class functions
@@ -23,6 +24,12 @@ class functions
             ['title' => 'Utilities', 'description' => 'Expenses for utilities'],
         ];
 
+        $loanCategories = [
+            ['title' => 'Personal Loan', 'description' => 'Loan for personal use'],
+            ['title' => 'Home Loan', 'description' => 'Loan for purchasing a home'],
+            ['title' => 'Car Loan', 'description' => 'Loan for purchasing a car'],
+        ];
+
         foreach ($incomeCategories as $category) {
             IncomeCategory::create([
                 'title' => $category['title'],
@@ -32,6 +39,13 @@ class functions
 
         foreach ($expenseCategories as $category) {
             ExpenseCategory::create([
+                'title' => $category['title'],
+                'description' => $category['description'],
+            ]);
+        }
+
+        foreach ($loanCategories as $category) {
+            LoanCategory::create([
                 'title' => $category['title'],
                 'description' => $category['description'],
             ]);
