@@ -29,7 +29,7 @@ class IncomeController extends BaseController
             DB::beginTransaction();
             $validatedData = $request->validated();
             $income = $this->income::create($validatedData);
-            $balance = UserBalance::firstOrNew();
+            $balance = UserBalance::firstOrCreate();
             $balance->total_income += $income->amount;
             $balance->balance += $income->amount;
             $balance->save();
@@ -44,13 +44,9 @@ class IncomeController extends BaseController
     public function show($id)
     {
         try {
-            DB::beginTransaction();
-            $this->checkOrFindResource($this->income, $id);
-            $specificResource = $this->income->where('created_by', auth()->id())->find($id);
-            DB::commit();
+            $specificResource = $this->income->where('created_by', auth()->id())->findOrFail($id);
             return $this->success(new IncomeResource($specificResource));
         } catch (\Exception $e) {
-            DB::rollBack();
             return $this->error($e);
         }
     }
@@ -64,7 +60,7 @@ class IncomeController extends BaseController
             $newAmount = $request->validated()['amount'];
             $amountDifference = $newAmount - $prevAmount;
             $income->update($request->validated());
-            $balance = UserBalance::firstOrNew();
+            $balance = UserBalance::firstOrCreate(['created_by' => auth()->id()]);
             $balance->total_income += $amountDifference;
             $balance->balance += $amountDifference;
             $balance->save();
@@ -81,7 +77,7 @@ class IncomeController extends BaseController
         $this->checkOwnership($income);
         try {
             DB::beginTransaction();
-            $balance = UserBalance::firstOrNew();
+            $balance = UserBalance::firstOrCreate();
             $balance->total_income -= $income->amount;
             $balance->balance -= $income->amount;
             $balance->save();

@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SavingRequest;
-use App\Http\Resources\SavingCollection;
-use App\Http\Resources\SavingResource;
+use App\Http\Resources\{SavingCollection, SavingResource};
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Saving;
-use App\Models\UserBalance;
+use App\Models\{Saving, UserBalance};
 use Illuminate\Support\Facades\DB;
 
 class SavingController extends BaseController

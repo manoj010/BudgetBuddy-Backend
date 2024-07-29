@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\WithdrawRequest;
-use App\Http\Resources\WithdrawCollection;
-use App\Http\Resources\WithdrawResource;
+use App\Http\Resources\{WithdrawCollection, WithdrawResource};
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Withdraw;
-use App\Models\UserBalance;
+use App\Models\{Withdraw, UserBalance};
 use Illuminate\Support\Facades\DB;
 
 class WithdrawController extends BaseController

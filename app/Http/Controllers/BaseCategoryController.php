@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\BaseCategoryCollection;
-use App\Http\Resources\BaseCategoryResource;
+use App\Http\Resources\{BaseCategoryCollection, BaseCategoryResource};
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,13 +34,9 @@ class BaseCategoryController extends BaseController
     {
         $userId = auth()->id();
         try {
-            DB::beginTransaction();
-            $this->checkOrFindResource($resource, $id);
-            $specificResource = $resource->where('created_by', $userId)->find($id);
-            DB::commit();
+            $specificResource = $resource->where('created_by', $userId)->findOrFail($id);
             return $this->success(new BaseCategoryResource($specificResource), 'Category Data', Response::HTTP_OK);
         } catch (\Exception $e) {
-            DB::rollBack();
             return $this->error($e);
         }
     }
