@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\AmountGreaterThanBalance;
 use App\Traits\AppResponse;
 use Illuminate\Foundation\Http\FormRequest;
 

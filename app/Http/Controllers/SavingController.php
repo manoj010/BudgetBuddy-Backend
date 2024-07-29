@@ -33,7 +33,7 @@ class SavingController extends BaseController
         
             if ($balance->balance < $validatedData['amount']) {
                 DB::rollBack();
-                return $this->error('Insufficient balance to save this amount.', Response::HTTP_BAD_REQUEST);
+                return $this->error('Insufficient balance to save this amount', Response::HTTP_BAD_REQUEST);
             }
 
             $save = $this->saving::create($validatedData);
@@ -46,6 +46,55 @@ class SavingController extends BaseController
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->error($e->getMessage());
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $specificResource = $this->saving->where('created_by', auth()->id())->findOrFail($id);
+            return $this->success(new SavingResource($specificResource));
+        } catch (\Exception $e) {
+            return $this->error($e);
+        }
+    }
+
+    public function update(SavingRequest $request, Saving $saving)
+    {
+        $this->checkOwnership($saving);
+        try {
+            DB::beginTransaction();
+            $prevAmount = $saving->amount;
+            $newAmount = $request->validated()['amount'];
+            $amountDifference = $newAmount - $prevAmount;
+            $saving->update($request->validated());
+            $balance = UserBalance::firstOrCreate(['created_by' => auth()->id()]);
+            $balance->total_saving += $amountDifference;
+            $balance->balance -= $amountDifference;
+            $balance->save();
+            DB::commit();
+            return $this->success(new SavingResource($saving), 'Saving updated Successfully', Response::HTTP_OK);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($e);
+        }
+    }
+
+    public function destroy(Saving $saving)
+    {
+        $this->checkOwnership($saving);
+        try {
+            DB::beginTransaction();
+            $balance = UserBalance::firstOrCreate();
+            $balance->total_saving -= $saving->amount;
+            $balance->balance += $saving->amount;
+            $balance->save();
+            $saving->delete();
+            DB::commit();
+            return $this->success('', 'Income deleted Successfully', Response::HTTP_OK);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($e);
         }
     }
 }

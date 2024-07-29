@@ -24,17 +24,14 @@ class BaseCategoryController extends BaseController
 
     protected function allResource(Model $resource)
     {
-        $userId = auth()->id();
-        $this->checkOrFindResource($resource);
-        $allResource = $resource->where('created_by', $userId)->get();
+        $allResource = $resource->where('created_by', auth()->id())->get();
         return $this->success(new BaseCategoryCollection($allResource), 'All Category Data', Response::HTTP_OK);
     }
 
     protected function specificResource(Model $resource, $id)
     {
-        $userId = auth()->id();
         try {
-            $specificResource = $resource->where('created_by', $userId)->findOrFail($id);
+            $specificResource = $resource->where('created_by', auth()->id())->findOrFail($id);
             return $this->success(new BaseCategoryResource($specificResource), 'Category Data', Response::HTTP_OK);
         } catch (\Exception $e) {
             return $this->error($e);

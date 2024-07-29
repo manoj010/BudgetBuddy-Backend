@@ -83,7 +83,7 @@ class IncomeController extends BaseController
             $balance->save();
             $income->delete();
             DB::commit();
-            return $this->success('Income deleted Successfully', Response::HTTP_OK);
+            return $this->success('', 'Income deleted Successfully', Response::HTTP_OK);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->error($e);

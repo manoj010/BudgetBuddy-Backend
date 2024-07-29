@@ -14,6 +14,13 @@ class SavingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $saving = $this->resource;
+
+        return [
+            'id' => $saving->id,
+            'amount' => $saving->amount,
+            'date_saved' => $saving->date_saved,
+            'notes' => $saving->notes,
+        ];
     }
 }

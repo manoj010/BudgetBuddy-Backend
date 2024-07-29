@@ -28,7 +28,7 @@ class UserController extends BaseController
             Auth::login($user);
             functions::createDefaultCategories();
             DB::commit();
-            return $this->success('User created successfully', $user, Response::HTTP_CREATED);
+            return $this->success($user, 'User created successfully', Response::HTTP_CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->error('An error occurred: ' . $e->getMessage());
