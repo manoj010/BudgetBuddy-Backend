@@ -50,4 +50,54 @@ class WithdrawController extends BaseController
             return $this->error($e->getMessage());
         }
     }
+
+    public function show($id)
+    {
+        try {
+            $specificResource = $this->withdraw->where('created_by', auth()->id())->findOrFail($id);
+            return $this->success(new WithdrawResource($specificResource));
+        } catch (\Exception $e) {
+            return $this->error($e);
+        }
+    }
+
+    public function update(WithdrawRequest $request, Withdraw $withdraw)
+    {
+        $this->checkOwnership($withdraw);
+        try {
+            DB::beginTransaction();
+            $prevAmount = $withdraw->amount;
+            $newAmount = $request->validated()['amount'];
+            $amountDifference = $newAmount - $prevAmount;
+            $withdraw->update($request->validated());
+            $balance = UserBalance::firstOrCreate(['created_by' => auth()->id()]);
+            $balance->total_withdraw += $amountDifference;
+            $balance->total_saving -= $amountDifference;
+            $balance->balance += $amountDifference;
+            $balance->save();
+            DB::commit();
+            return $this->success(new WithdrawResource($withdraw), 'Withdraw updated Successfully', Response::HTTP_OK);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($e);
+        }
+    }   
+    
+    public function destroy(Withdraw $withdraw)
+    {
+        $this->checkOwnership($withdraw);
+        try {
+            DB::beginTransaction();
+            $balance = UserBalance::firstOrCreate();
+            $balance->total_withdraw -= $withdraw->amount;
+            $balance->balance -= $withdraw->amount;
+            $balance->save();
+            $withdraw->delete();
+            DB::commit();
+            return $this->success('', 'Withdraw deleted Successfully', Response::HTTP_OK);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($e);
+        }
+    }
 }
