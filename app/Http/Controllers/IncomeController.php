@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IncomeRequest;
 use App\Http\Resources\{IncomeCollection, IncomeResource};
-use App\Models\{Income, UserBalance};
+use App\Models\{Income};
+use App\Services\BalanceService;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class IncomeController extends BaseController
 {
     protected $income;
+    protected $balanceService;
 
-    public function __construct(Income $income)
+    public function __construct(Income $income, BalanceService $balanceService)
     {
         $this->income = $income;
+        $this->balanceService = $balanceService;
     }
 
     public function index()
@@ -29,15 +32,17 @@ class IncomeController extends BaseController
             DB::beginTransaction();
             $validatedData = $request->validated();
             $income = $this->income::create($validatedData);
-            $balance = UserBalance::firstOrCreate();
+
+            $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_income += $income->amount;
             $balance->balance += $income->amount;
             $balance->save();
+
             DB::commit();
             return $this->success(new IncomeResource($income), 'Income created successfully', Response::HTTP_CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->error($e);
+            return $this->error($e->getMessage());
         }
     }
 
@@ -47,7 +52,7 @@ class IncomeController extends BaseController
             $specificResource = $this->income->where('created_by', auth()->id())->findOrFail($id);
             return $this->success(new IncomeResource($specificResource));
         } catch (\Exception $e) {
-            return $this->error($e);
+            return $this->error($e->getMessage());
         }
     }
 
@@ -56,19 +61,23 @@ class IncomeController extends BaseController
         $this->checkOwnership($income);
         try {
             DB::beginTransaction();
+
             $prevAmount = $income->amount;
             $newAmount = $request->validated()['amount'];
             $amountDifference = $newAmount - $prevAmount;
+
             $income->update($request->validated());
-            $balance = UserBalance::firstOrCreate(['created_by' => auth()->id()]);
+
+            $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_income += $amountDifference;
             $balance->balance += $amountDifference;
             $balance->save();
+
             DB::commit();
             return $this->success(new IncomeResource($income), 'Income updated Successfully', Response::HTTP_OK);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->error($e);
+            return $this->error($e->getMessage());
         }
     }
 
@@ -77,16 +86,19 @@ class IncomeController extends BaseController
         $this->checkOwnership($income);
         try {
             DB::beginTransaction();
-            $balance = UserBalance::firstOrCreate();
+
+            $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_income -= $income->amount;
             $balance->balance -= $income->amount;
             $balance->save();
+
             $income->delete();
+
             DB::commit();
             return $this->success('', 'Income deleted Successfully', Response::HTTP_OK);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->error($e);
+            return $this->error($e->getMessage());
         }
     }
 }

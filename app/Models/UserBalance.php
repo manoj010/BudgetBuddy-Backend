@@ -8,7 +8,7 @@ class UserBalance extends BaseModel
 {
     use HasFactory;
     
-    protected $fillable = ['total_income', 'total_expense', 'total_saving', 'total_withdraw', 'balance'];
+    protected $fillable = ['month', 'total_income', 'total_expense', 'total_saving', 'total_withdraw', 'balance'];
 
     public function user()
     {

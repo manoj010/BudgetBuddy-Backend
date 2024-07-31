@@ -5,6 +5,8 @@ namespace App\Helpers;
 use App\Models\IncomeCategory;
 use App\Models\ExpenseCategory;
 use App\Models\LoanCategory;
+use App\Models\UserBalance;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class functions
@@ -67,5 +69,15 @@ class functions
         return [
             'balance' => $balance,
         ];
+    }
+
+    public static function getOrCreateMonthlyBalance($userId)
+    {
+        $currentMonth = Carbon::now()->format('Y-m');
+
+        return UserBalance::firstOrCreate([
+            'created_by' => $userId,
+            'month' => $currentMonth,
+        ]);
     }
 }
