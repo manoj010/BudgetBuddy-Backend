@@ -17,7 +17,7 @@ class Handler extends ExceptionHandler
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
     protected $levels = [
-        //
+        // Add custom log levels for specific exceptions here if needed
     ];
 
     /**
@@ -26,7 +26,7 @@ class Handler extends ExceptionHandler
      * @var array<int, class-string<\Throwable>>
      */
     protected $dontReport = [
-        //
+        // Add exceptions here that you don't want to report
     ];
 
     /**
@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+            // You can add custom reporting logic here if needed
         });
     }
 

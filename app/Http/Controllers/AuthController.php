@@ -38,4 +38,22 @@ class AuthController extends BaseController
             'message' => "Invalid Credentials.",
         ], Response::HTTP_UNAUTHORIZED);
     }
+
+    public function logout()
+    {
+        $user = Auth::guard('api')->user();
+        if ($user) {
+            $token = $user->token();
+            $token->revoke();
+            return response()->json([
+                'code' => Response::HTTP_OK,
+                'message' => 'Logged out successfully.'
+            ], Response::HTTP_OK);
+        }
+
+        return response()->json([
+            'status' => Response::HTTP_UNAUTHORIZED,
+            'error' => 'Unauthorized.',
+        ], Response::HTTP_UNAUTHORIZED);
+    }
 }
