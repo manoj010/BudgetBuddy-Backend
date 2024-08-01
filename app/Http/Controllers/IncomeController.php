@@ -33,6 +33,10 @@ class IncomeController extends BaseController
             $validatedData = $request->validated();
             $income = $this->income::create($validatedData);
 
+            if (!$this->balanceService->checkIfNewMonthBalanceCreated(auth()->id())) {
+                $this->balanceService->createNewMonthlyBalance(auth()->id());
+            }
+
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_income += $income->amount;
             $balance->balance += $income->amount;

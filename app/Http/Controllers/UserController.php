@@ -26,7 +26,7 @@ class UserController extends BaseController
                 'password' => bcrypt($request->password),
             ]);
             Auth::login($user);
-            functions::createDefaultCategories();
+            $this->createDefaultCategories();
             DB::commit();
             return $this->success($user, 'User created successfully', Response::HTTP_CREATED);
         } catch (\Exception $e) {

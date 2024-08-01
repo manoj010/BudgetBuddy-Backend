@@ -18,7 +18,5 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'default@example.com',
         //     'password' => bcrypt('12345678'),
         // ]);
-        $this->call(IncomeSeeder::class);
-        // $this->call(ExpenseSeeder::class);
     }
 }

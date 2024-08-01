@@ -21,7 +21,7 @@ class TransactionController extends BaseController
 
         $transformedData = $sortedData->map(function ($item) {
             return [
-                'created_at' => $item->created_at->format("Y-m-d"),
+                'created_at' => $item->created_at->format('D, M j, Y'),
                 'transaction_type' => $item->type,  
                 'amount' => $item->amount,
             ];

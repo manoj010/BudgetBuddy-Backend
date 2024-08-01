@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeCategoryController;
@@ -50,4 +51,8 @@ Route::middleware('auth:api')->prefix('transaction')->group(function () {
 Route::middleware('auth:api')->prefix('dashboard')->group(function () {
     Route::get('/total', [DashboardController::class, 'total']);
     Route::get('/total-by-month', [DashboardController::class, 'totalByMonth']);
+});
+
+Route::middleware('auth:api')->prefix('charts')->group(function () {
+    Route::get('/monthly-data', [ChartController::class, 'monthlyData']);
 });
