@@ -9,6 +9,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoanCategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SavingController;
+use App\Http\Controllers\SavingGoalController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserBalanceController;
 use App\Http\Controllers\UserController;
@@ -44,6 +45,7 @@ Route::middleware('auth:api')->prefix('transaction')->group(function () {
     Route::apiResource('income', IncomeController::class);
     Route::apiResource('expense', ExpenseController::class);
     Route::apiResource('saving', SavingController::class);
+    Route::apiResource('saving-goal', SavingGoalController::class);
     Route::apiResource('withdraw', WithdrawController::class);
     Route::apiResource('balance', UserBalanceController::class);
 });

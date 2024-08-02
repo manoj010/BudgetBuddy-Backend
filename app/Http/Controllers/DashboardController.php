@@ -14,22 +14,18 @@ class DashboardController extends BaseController
         $currentMonth = Carbon::now()->format('Y-m');
         $previousMonth = Carbon::now()->subMonth()->format('Y-m');
 
-        // Retrieve financial summary for the current month
         $currentMonthSummary = DB::table('user_balances')
             ->where('created_by', auth()->id())
             ->where('created_at', 'like', $currentMonth . '%')
             ->first();
 
-        // Retrieve financial summary for the previous month
         $previousMonthSummary = DB::table('user_balances')
             ->where('created_by', auth()->id())
             ->where('created_at', 'like', $previousMonth . '%')
             ->first();
 
-        // Initialize fields array
         $fields = ['balance', 'total_income', 'total_expense', 'total_saving', 'total_withdraw'];
 
-        // Calculate percentage difference for each field
         $percentageChanges = [];
 
         if ($currentMonthSummary && $previousMonthSummary) {
@@ -40,18 +36,24 @@ class DashboardController extends BaseController
                 if ($previousValue != 0) {
                     $percentageChange = (($currentValue - $previousValue) / $previousValue) * 100;
                 } else {
-                    $percentageChange = ($currentValue != 0) ? 100 : 0; // Handle division by zero
+                    $percentageChange = ($currentValue != 0) ? 100 : 0;
                 }
 
                 $percentageChanges[$field] = $percentageChange;
             }
         } else {
             foreach ($fields as $field) {
-                $percentageChanges[$field] = null; // No data to compare
+                $percentageChanges[$field] = null;
             }
         }
 
-        // Prepare the response
+        $percentageChanges = [
+            'balance' => round($percentageChanges['balance']),
+            'total_income' => round($percentageChanges['total_income']),
+            'total_expense' => round($percentageChanges['total_expense']),
+            'total_saving' => round($percentageChanges['total_saving']),
+        ];
+
         $response = [
             'current_month' => new DashboardResource($currentMonthSummary),
             'percentage_changes' => $percentageChanges
