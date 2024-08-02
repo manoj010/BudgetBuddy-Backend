@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DashboardResource;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -10,45 +11,52 @@ class DashboardController extends BaseController
 {
     public function total()
     {
-        $financialSummary = DB::table('user_balances')
+        $currentMonth = Carbon::now()->format('Y-m');
+        $previousMonth = Carbon::now()->subMonth()->format('Y-m');
+
+        // Retrieve financial summary for the current month
+        $currentMonthSummary = DB::table('user_balances')
             ->where('created_by', auth()->id())
+            ->where('created_at', 'like', $currentMonth . '%')
             ->first();
-        return $this->success(new DashboardResource($financialSummary), 'Summary', Response::HTTP_CREATED);
-    }
 
-    //income and expense total by month
-    public function totalByMonth()
-    {
-        $incomeByMonth = DB::table('incomes')
-            ->select(DB::raw('DATE_PART(\'month\', created_at) as month'), DB::raw('SUM(amount) as total_income'))
+        // Retrieve financial summary for the previous month
+        $previousMonthSummary = DB::table('user_balances')
             ->where('created_by', auth()->id())
-            ->groupBy(DB::raw('DATE_PART(\'month\', created_at)'))
-            ->orderBy(DB::raw('DATE_PART(\'month\', created_at)'))
-            ->get();
+            ->where('created_at', 'like', $previousMonth . '%')
+            ->first();
 
-        $expenseByMonth = DB::table('expenses')
-            ->select(DB::raw('DATE_PART(\'month\', created_at) as month'), DB::raw('SUM(amount) as total_expense'))
-            ->where('created_by', auth()->id())
-            ->groupBy(DB::raw('DATE_PART(\'month\', created_at)'))
-            ->orderBy(DB::raw('DATE_PART(\'month\', created_at)'))
-            ->get();
+        // Initialize fields array
+        $fields = ['balance', 'total_income', 'total_expense', 'total_saving', 'total_withdraw'];
 
-        $results = [];
+        // Calculate percentage difference for each field
+        $percentageChanges = [];
 
-        for ($i = 1; $i <= 12; $i++) {
-            $income = $incomeByMonth->firstWhere('month', $i);
-            $expense = $expenseByMonth->firstWhere('month', $i);
+        if ($currentMonthSummary && $previousMonthSummary) {
+            foreach ($fields as $field) {
+                $currentValue = $currentMonthSummary->$field;
+                $previousValue = $previousMonthSummary->$field;
 
-            $totalIncome = $income ? $income->total_income : 0;
-            $totalExpense = $expense ? $expense->total_expense : 0;
+                if ($previousValue != 0) {
+                    $percentageChange = (($currentValue - $previousValue) / $previousValue) * 100;
+                } else {
+                    $percentageChange = ($currentValue != 0) ? 100 : 0; // Handle division by zero
+                }
 
-            $results[] = [
-                'month' => $i,
-                'total_income' => $totalIncome,
-                'total_expense' => $totalExpense,
-            ];
+                $percentageChanges[$field] = $percentageChange;
+            }
+        } else {
+            foreach ($fields as $field) {
+                $percentageChanges[$field] = null; // No data to compare
+            }
         }
 
-        return response()->json($results);
+        // Prepare the response
+        $response = [
+            'current_month' => new DashboardResource($currentMonthSummary),
+            'percentage_changes' => $percentageChanges
+        ];
+
+        return $this->success($response, 'Summary', Response::HTTP_OK);
     }
 }
