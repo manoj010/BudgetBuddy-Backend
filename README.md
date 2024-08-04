@@ -9,8 +9,8 @@
 - [License](#license)
 
 ## Introduction
-BudgetBuddy-Backend(API)
-API for a Budget Buddy (A financial tracking and Management Application)
+BudgetBuddy-Backend
+This repository contains the backend(API's) code for Budget Buddy, a financial tracking and management application.
 
 ## Installation
 
