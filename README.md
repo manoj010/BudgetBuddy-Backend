@@ -1,4 +1,4 @@
-# BudgetBuddy API
+# BudgetBuddy Backend
 
 ## Table of Contents
 
@@ -6,11 +6,11 @@
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Running the Project](#running-the-project)
-- [Swagger Documentation](#swagger-documentation)
+- [License](#license)
 
 ## Introduction
-    Budget-Buddy-Backend(API)
-    API for a Budget Buddy (A financial tracking and Management Application)
+BudgetBuddy-Backend
+This repository contains the backend(API's) code for Budget Buddy, a financial tracking and management application.
 
 ## Installation
 
@@ -87,4 +87,8 @@
     php artisan serve
     ```
 
-    The project will be available at [http://localhost:8000](http://localhost:8000)
+   The project will be available at [http://localhost:8000](http://localhost:8000).
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
