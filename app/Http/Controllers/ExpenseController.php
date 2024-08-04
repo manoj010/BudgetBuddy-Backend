@@ -35,11 +35,6 @@ class ExpenseController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
 
-            if ($balance->balance < $expense->amount) {
-                DB::rollBack();
-                return $this->error('Insufficient balance', Response::HTTP_BAD_REQUEST);
-            }
-
             $balance->total_expense += $expense->amount;
             $balance->balance -= $expense->amount;
             $balance->save();

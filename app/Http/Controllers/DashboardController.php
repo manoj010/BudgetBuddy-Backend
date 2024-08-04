@@ -9,10 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DashboardController extends BaseController
 {
-    public function total()
+    public function overview()
     {
         $currentMonth = Carbon::now()->format('Y-m');
         $previousMonth = Carbon::now()->subMonth()->format('Y-m');
+
+        $goal = DB::table('saving_goals')
+            ->where('created_by', auth()->id())
+            ->value('target_amount');
 
         $currentMonthSummary = DB::table('user_balances')
             ->where('created_by', auth()->id())
@@ -56,7 +60,8 @@ class DashboardController extends BaseController
 
         $response = [
             'current_month' => new DashboardResource($currentMonthSummary),
-            'percentage_changes' => $percentageChanges
+            'percentage_changes' => $percentageChanges,
+            'goal' => $goal
         ];
 
         return $this->success($response, 'Summary', Response::HTTP_OK);

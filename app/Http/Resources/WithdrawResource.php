@@ -14,6 +14,13 @@ class WithdrawResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $withdraw = $this->resource;
+
+        return [
+            'id' => $withdraw->id,
+            'amount' => $withdraw->amount,
+            'date_saved' => $withdraw->date_saved,
+            'notes' => $withdraw->notes,
+        ];
     }
 }

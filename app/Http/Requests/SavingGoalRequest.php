@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\AppResponse;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class SavingGoalRequest extends FormRequest
 {
+    use AppResponse;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -23,18 +25,27 @@ class SavingGoalRequest extends FormRequest
      */
     public function rules(): array
     {
-        $currentMonth = Carbon::now()->format('Y-m');
-
         return [
             'for_month' => [
                 'nullable',
                 'date',
                 Rule::unique('saving_goals')
-                    ->where(function ($query) use ($currentMonth) {
-                        return $query->whereDate('for_month', $currentMonth);
+                    ->where(function ($query) {
+                        return $query->where('created_by', $this->user()->id)
+                                     ->whereMonth('for_month', Carbon::now()->month)
+                                     ->whereYear('for_month', Carbon::now()->year);
                     })
             ],
             'target_amount' => 'required|numeric|min:0',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if (is_null($this->for_month)) {
+            $this->merge([
+                'for_month' => Carbon::now()->startOfMonth()->toDateString(),
+            ]);
+        }
     }
 }

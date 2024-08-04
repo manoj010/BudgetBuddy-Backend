@@ -51,8 +51,7 @@ Route::middleware('auth:api')->prefix('transaction')->group(function () {
 });
 
 Route::middleware('auth:api')->prefix('dashboard')->group(function () {
-    Route::get('/total', [DashboardController::class, 'total']);
-    Route::get('/total-by-month', [DashboardController::class, 'totalByMonth']);
+    Route::get('/overview', [DashboardController::class, 'overview']);
 });
 
 Route::middleware('auth:api')->prefix('charts')->group(function () {
