@@ -19,6 +19,7 @@ class BaseCategoryResource extends JsonResource
             'id' => $category->id,
             'title' => $category->title,
             'description' => $category->description,
+            'status' => $category->status,
             'created_at' => $category->created_at,
             'updated_at' => $category->updated_at
         ];

@@ -38,7 +38,8 @@ class ExpenseCategoryRequest extends FormRequest
                     })
                     ->whereNull('archived_at')
             ],
-            'description' => 'nullable|string|max:1000'
+            'description' => 'nullable|string|max:1000',
+            'status' => 'required|boolean'
         ];
     }
 }
