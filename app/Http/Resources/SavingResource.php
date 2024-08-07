@@ -20,7 +20,7 @@ class SavingResource extends JsonResource
         return [
             'id' => $saving->id,
             'amount' => $saving->amount,
-            'date_saved' => $saving->date_saved,
+            'date' => $saving->created_at->format('Y-m-d'),
             'notes' => $saving->notes,
         ];
     }

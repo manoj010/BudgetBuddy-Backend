@@ -14,6 +14,12 @@ class SavingGoalResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $savingGoal = $this->resource;
+
+        return [
+            'id' => $savingGoal->id,
+            'for_month' => $savingGoal->for_month,                
+            'target_amount' => $savingGoal->target_amount
+        ];
     }
 }

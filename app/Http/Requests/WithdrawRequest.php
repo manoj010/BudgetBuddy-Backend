@@ -26,7 +26,6 @@ class WithdrawRequest extends FormRequest
     {
         return [
             'amount' => ['required', 'numeric', 'min:0'],
-            'date_saved' => 'nullable|date',
             'notes' => 'nullable|string',
         ];
     }

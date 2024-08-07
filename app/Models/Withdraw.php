@@ -8,5 +8,5 @@ class Withdraw extends BaseModel
 {
     use HasFactory;
 
-    protected $fillable = ['amount', 'date_saved', 'notes'];
+    protected $fillable = ['amount', 'notes'];
 }

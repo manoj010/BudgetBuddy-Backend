@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('withdraws', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount', 10, 2);
-            $table->date('date_saved')->default(DB::raw('CURRENT_DATE'));
             $table->longText('notes')->nullable();
             $table->string('type')->default('withdraw');
             $table->defaultInfos();

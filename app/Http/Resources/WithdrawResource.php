@@ -20,7 +20,7 @@ class WithdrawResource extends JsonResource
         return [
             'id' => $withdraw->id,
             'amount' => $withdraw->amount,
-            'date_saved' => $withdraw->date_saved,
+            'date' => $withdraw->created_at->format('Y-m-d'),
             'notes' => $withdraw->notes,
         ];
     }
