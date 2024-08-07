@@ -33,6 +33,7 @@ trait DefaultCategories
             IncomeCategory::create([
                 'title' => $category['title'],
                 'description' => $category['description'],
+                'status' => true,
             ]);
         }
 
@@ -40,6 +41,7 @@ trait DefaultCategories
             ExpenseCategory::create([
                 'title' => $category['title'],
                 'description' => $category['description'],
+                'status' => true,
             ]);
         }
 
@@ -47,6 +49,7 @@ trait DefaultCategories
             LoanCategory::create([
                 'title' => $category['title'],
                 'description' => $category['description'],
+                'status' => true,
             ]);
         }
     }
