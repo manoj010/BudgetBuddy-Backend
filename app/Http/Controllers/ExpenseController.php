@@ -23,7 +23,8 @@ class ExpenseController extends BaseController
     public function index()
     {
         $expense = $this->expense->where('created_by', auth()->id())->get();
-        return $this->success(new ExpenseCollection($expense), 'All Expense');
+        $sortedData = $expense->sortByDesc('created_at')->values();
+        return $this->success(new ExpenseCollection($sortedData), 'All Expense');
     }
 
     public function store(ExpenseRequest $request)
@@ -31,10 +32,18 @@ class ExpenseController extends BaseController
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
+
+            if(!$validatedData['date_spent'] || $validatedData['date_spent'] === null) {
+                $validatedData['date_spent'] = now()->format('Y-m-d');
+            }
+            
             $expense = $this->expense::create($validatedData);
 
-            $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
+            if (!$this->balanceService->checkIfNewMonthBalanceCreated(auth()->id())) {
+                $this->balanceService->createNewMonthlyBalance(auth()->id());
+            }
 
+            $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_expense += $expense->amount;
             $balance->balance -= $expense->amount;
             $balance->save();

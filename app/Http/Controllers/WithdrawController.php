@@ -23,7 +23,8 @@ class WithdrawController extends BaseController
     public function index()
     {
         $withdraw = $this->withdraw->where('created_by', auth()->id())->get();
-        return $this->success(new WithdrawCollection($withdraw), 'All Withdraw');
+        $sortedData = $withdraw->sortByDesc('created_at')->values();
+        return $this->success(new WithdrawCollection($sortedData), 'All Withdraw');
     }
 
     public function store(WithdrawRequest $request)
@@ -31,6 +32,10 @@ class WithdrawController extends BaseController
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
+
+            if (!$this->balanceService->checkIfNewMonthBalanceCreated(auth()->id())) {
+                $this->balanceService->createNewMonthlyBalance(auth()->id());
+            }
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
         

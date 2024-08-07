@@ -23,7 +23,8 @@ class IncomeController extends BaseController
     public function index()
     {
         $income = $this->income->where('created_by', auth()->id())->get();
-        return $this->success(new IncomeCollection($income), 'All Income');
+        $sortedData = $income->sortByDesc('created_at')->values();
+        return $this->success(new IncomeCollection($sortedData), 'All Income');
     }
 
     public function store(IncomeRequest $request)
@@ -31,6 +32,11 @@ class IncomeController extends BaseController
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
+            
+            if(!$validatedData['date_received'] || $validatedData['date_received'] === null) {
+                $validatedData['date_received'] = now()->format('Y-m-d');
+            }
+
             $income = $this->income::create($validatedData);
 
             if (!$this->balanceService->checkIfNewMonthBalanceCreated(auth()->id())) {

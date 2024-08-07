@@ -22,7 +22,7 @@ class DropdownController extends BaseController
             $loanCategory = LoanCategory::where('created_by', auth()->id())->where('status', true)->get();
             return $this->success(new BaseCategoryCollection($loanCategory), 'All Loan Category Data', Response::HTTP_OK);
         } else {
-            return $this->error('Invalid Category Slug');
+            return $this->error('Invalid Category.');
         }
     }
 }

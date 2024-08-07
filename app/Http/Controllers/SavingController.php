@@ -23,7 +23,8 @@ class SavingController extends BaseController
     public function index()
     {
         $saving = $this->saving->where('created_by', auth()->id())->get();
-        return $this->success(new SavingCollection($saving), 'All Saving');
+        $sortedData = $saving->sortByDesc('created_at')->values();
+        return $this->success(new SavingCollection($sortedData), 'All Saving');
     }
 
     public function store(SavingRequest $request)
@@ -32,7 +33,11 @@ class SavingController extends BaseController
             DB::beginTransaction();
             $validatedData = $request->validated();
 
-                $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
+            if (!$this->balanceService->checkIfNewMonthBalanceCreated(auth()->id())) {
+                $this->balanceService->createNewMonthlyBalance(auth()->id());
+            }
+
+            $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
 
             if ($balance->balance < $validatedData['amount']) {
                 DB::rollBack();
