@@ -35,6 +35,12 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
+Route::middleware('auth:api')->prefix('user')->group(function () {
+    Route::apiResource('profile', UserController::class);
+    Route::post('/profile', [UserController::class, 'save']);
+    Route::post('/change-password', [UserController::class, 'changePassword']);
+});
+
 Route::middleware('auth:api')->prefix('setup')->group(function () {
     Route::apiResource('income-category', IncomeCategoryController::class);
     Route::apiResource('expense-category', ExpenseCategoryController::class);

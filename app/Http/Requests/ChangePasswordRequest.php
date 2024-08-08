@@ -5,10 +5,10 @@ namespace App\Http\Requests;
 use App\Traits\AppResponse;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserProfileRequest extends FormRequest
+class ChangePasswordRequest extends FormRequest
 {
     use AppResponse;
-
+        
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -25,12 +25,7 @@ class UserProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'nullable|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'last_name' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|digits:10',
-            'dob' => 'nullable|date',
-            'address' => 'nullable|string|max:255',
+            'new_password' => 'required|string|min:8|confirmed',
         ];
-    }
+    }    
 }
