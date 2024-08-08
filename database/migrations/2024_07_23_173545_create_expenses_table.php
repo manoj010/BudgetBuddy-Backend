@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('date_spent')->default(DB::raw('CURRENT_DATE'));
             $table->longText('notes')->nullable();
             $table->boolean('is_recurring')->default(false);
-            $table->string('type')->default('expense');
+            $table->string('type')->default('Expense');
             $table->defaultInfos();
             $table->timestamps();
         });

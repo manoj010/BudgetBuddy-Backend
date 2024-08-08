@@ -57,6 +57,7 @@ Route::middleware('auth:api')->prefix('dashboard')->group(function () {
 
 Route::middleware('auth:api')->prefix('charts')->group(function () {
     Route::get('/monthly-data', [ChartController::class, 'monthlyData']);
+    // Route::get('/by-category', [ChartController::class, 'byCategory']);
 });
 
 Route::middleware('auth:api')->prefix('dropdown')->group(function () {

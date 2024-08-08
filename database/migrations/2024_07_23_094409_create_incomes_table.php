@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('date_received')->default(DB::raw('CURRENT_DATE'));
             $table->longText('notes')->nullable();
             $table->boolean('is_recurring')->default(false);
-            $table->string('type')->default('income');
+            $table->string('type')->default('Income');
             $table->defaultInfos();
             $table->timestamps();
         });

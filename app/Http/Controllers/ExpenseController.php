@@ -45,7 +45,7 @@ class ExpenseController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_expense += $expense->amount;
-            $balance->balance -= $expense->amount;
+            $balance->closing_balance -= $expense->amount;
             $balance->save();
 
             DB::commit();
@@ -79,7 +79,7 @@ class ExpenseController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_expense += $amountDifference;
-            $balance->balance -= $amountDifference;
+            $balance->closing_balance -= $amountDifference;
             $balance->save();
 
             DB::commit();
@@ -98,7 +98,7 @@ class ExpenseController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_expense -= $expense->amount;
-            $balance->balance += $expense->amount;
+            $balance->closing_balance += $expense->amount;
             $balance->save();
 
             $expense->delete();

@@ -45,7 +45,7 @@ class IncomeController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_income += $income->amount;
-            $balance->balance += $income->amount;
+            $balance->closing_balance += $income->amount;
             $balance->save();
 
             DB::commit();
@@ -80,7 +80,7 @@ class IncomeController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_income += $amountDifference;
-            $balance->balance += $amountDifference;
+            $balance->closing_balance += $amountDifference;
             $balance->save();
 
             DB::commit();
@@ -99,7 +99,7 @@ class IncomeController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_income -= $income->amount;
-            $balance->balance -= $income->amount;
+            $balance->closing_balance -= $income->amount;
             $balance->save();
 
             $income->delete();

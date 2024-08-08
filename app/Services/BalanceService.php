@@ -9,7 +9,7 @@ class BalanceService
 {
     public function getOrCreateMonthlyBalance($userId)
     {
-        $currentMonth = Carbon::now()->format('Y-m');
+        $currentMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
 
         return UserBalance::firstOrCreate([
             'created_by' => $userId,
@@ -19,7 +19,8 @@ class BalanceService
 
     public function getPreviousMonthBalance($userId)
     {
-        $previousMonth = Carbon::now()->subMonth()->format('Y-m');
+        $previousMonth = Carbon::now()->subMonth()->startOfMonth()->format('Y-m-d');
+
         return UserBalance::where('created_by', $userId)
             ->where('month', $previousMonth)
             ->first();
@@ -27,15 +28,16 @@ class BalanceService
 
     public function createNewMonthlyBalance($userId)
     {
-        $currentMonth = Carbon::now()->format('Y-m');
+        $currentMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
         $previousMonthBalance = $this->getPreviousMonthBalance($userId);
 
-        $newBalance = $previousMonthBalance ? $previousMonthBalance->balance : 0;
+        $newBalance = $previousMonthBalance ? $previousMonthBalance->closing_balance : 0;
 
         return UserBalance::updateOrCreate(
             ['created_by' => $userId, 'month' => $currentMonth],
             [
-                'balance' => $newBalance,
+                'opening_balance' => $newBalance,
+                'closing_balance' => $newBalance,
                 'total_income' => 0,
                 'total_expense' => 0,
                 'total_saving' => $previousMonthBalance ? $previousMonthBalance->total_saving : 0,
@@ -46,7 +48,7 @@ class BalanceService
 
     public function checkIfNewMonthBalanceCreated($userId)
     {
-        $currentMonth = Carbon::now()->format('Y-m');
+        $currentMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
         return UserBalance::where('created_by', $userId)
             ->where('month', $currentMonth)
             ->exists();

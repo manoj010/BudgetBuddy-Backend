@@ -28,7 +28,7 @@ class DashboardController extends BaseController
             ->where('created_at', 'like', $previousMonth . '%')
             ->first();
 
-        $fields = ['balance', 'total_income', 'total_expense', 'total_saving', 'total_withdraw'];
+        $fields = ['opening_balance', 'closing_balance', 'total_income', 'total_expense', 'total_saving', 'total_withdraw'];
 
         $percentageChanges = [];
 
@@ -52,7 +52,8 @@ class DashboardController extends BaseController
         }
 
         $percentageChanges = [
-            'balance' => round($percentageChanges['balance']),
+            'opening_balance' => round($percentageChanges['opening_balance']),
+            'balance' => round($percentageChanges['closing_balance']),
             'total_income' => round($percentageChanges['total_income']),
             'total_expense' => round($percentageChanges['total_expense']),
             'total_saving' => round($percentageChanges['total_saving']),

@@ -47,7 +47,7 @@ class WithdrawController extends BaseController
             $withdraw = $this->withdraw::create($validatedData);
             $balance->total_withdraw += $withdraw->amount;
             $balance->total_saving -= $withdraw->amount;
-            $balance->balance += $withdraw->amount;
+            $balance->closing_balance += $withdraw->amount;
             $balance->save();
 
             DB::commit();
@@ -82,7 +82,7 @@ class WithdrawController extends BaseController
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_withdraw += $amountDifference;
             $balance->total_saving -= $amountDifference;
-            $balance->balance += $amountDifference;
+            $balance->closing_balance += $amountDifference;
             $balance->save();
 
             DB::commit();
@@ -101,7 +101,7 @@ class WithdrawController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_withdraw -= $withdraw->amount;
-            $balance->balance -= $withdraw->amount;
+            $balance->closing_balance -= $withdraw->amount;
             $balance->save();
 
             $withdraw->delete();
