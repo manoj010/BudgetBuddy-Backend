@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('user_balances', function (Blueprint $table) {
             $table->id();
-            $table->string('month');
-            $table->decimal('balance', 10, 2)->default(0);
+            $table->date('month');
+            $table->decimal('opening_balance', 10, 2)->default(0);
+            $table->decimal('closing_balance', 10, 2)->default(0);
             $table->decimal('total_income', 10, 2)->default(0);
             $table->decimal('total_expense', 10, 2)->default(0);
             $table->decimal('total_saving', 10, 2)->default(0);

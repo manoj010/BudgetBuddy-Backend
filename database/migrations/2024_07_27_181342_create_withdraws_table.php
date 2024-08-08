@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('amount', 10, 2);
             $table->longText('notes')->nullable();
-            $table->string('type')->default('withdraw');
+            $table->string('type')->default('Withdraw');
             $table->defaultInfos();
             $table->timestamps();
         });

@@ -39,14 +39,14 @@ class SavingController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
 
-            if ($balance->balance < $validatedData['amount']) {
+            if ($balance->closing_balance < $validatedData['amount']) {
                 DB::rollBack();
                 return $this->error('Insufficient balance to save this amount', Response::HTTP_BAD_REQUEST);
             }
 
             $save = $this->saving::create($validatedData);
             $balance->total_saving += $save->amount;
-            $balance->balance -= $save->amount;
+            $balance->closing_balance -= $save->amount;
             $balance->save();
 
             DB::commit();
@@ -80,7 +80,7 @@ class SavingController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_saving += $amountDifference;
-            $balance->balance -= $amountDifference;
+            $balance->closing_balance -= $amountDifference;
             $balance->save();
 
             DB::commit();
@@ -99,7 +99,7 @@ class SavingController extends BaseController
 
             $balance = $this->balanceService->getOrCreateMonthlyBalance(auth()->id());
             $balance->total_saving -= $saving->amount;
-            $balance->balance += $saving->amount;
+            $balance->closing_balance += $saving->amount;
             $balance->save();
 
             $saving->delete();

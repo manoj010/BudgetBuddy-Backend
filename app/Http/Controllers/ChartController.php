@@ -8,6 +8,7 @@ use App\Models\Saving;
 use App\Models\Withdraw;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ChartController extends Controller
 {
@@ -39,11 +40,28 @@ class ChartController extends Controller
             ->groupBy('month')
             ->get();
 
-        $data = array_fill(0, $month, 0); 
+        $data = array_fill(0, $month, 0);
         foreach ($monthlyData as $item) {
             $data[$item->month - 1] = $item->$columnAlias;
         }
 
         return $data;
     }
+    
+    // public function byCategory()
+    // {
+    //     $incomeData = Income::select('category_id', DB::raw('SUM(amount) as total_amount'))
+    //         ->groupBy('category_id')
+    //         ->get();
+
+
+    //     $expenseData = Expense::select('category_id', DB::raw('SUM(amount) as total_amount'))
+    //         ->groupBy('category_id')
+    //         ->get();
+
+    //     return response()->json([
+    //         'income_category_data' => $incomeData,
+    //         'expense_category_data' => $expenseData,
+    //     ]);
+    // }
 }

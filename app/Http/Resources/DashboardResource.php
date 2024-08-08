@@ -16,11 +16,12 @@ class DashboardResource extends JsonResource
     {
         $dashboard = $this->resource;
         return [
+            // 'opening_balance' => $dashboard->opening_balance,
+            'balance' => $dashboard->closing_balance,
             'total_income' => $dashboard->total_income,
             'total_expense' => $dashboard->total_expense,
             'total_saving' => $dashboard->total_saving,
             'total_withdraw' => $dashboard->total_withdraw,
-            'balance' => $dashboard->balance
         ];
     }
 }
