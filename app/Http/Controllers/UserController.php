@@ -70,7 +70,7 @@ class UserController extends BaseController
             $user->password = bcrypt($request->new_password);
             $user->save();
             DB::commit();
-            return $this->success(null, 'Password updated successfully');
+            return $this->success('', 'Password updated successfully');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->error('An error occurred: ' . $e->getMessage());

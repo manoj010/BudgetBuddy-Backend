@@ -18,5 +18,9 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'default@example.com',
         //     'password' => bcrypt('12345678'),
         // ]);
+        $this->call([
+            UserBalancesSeeder::class,
+            TransactionSeeder::class,
+        ]);
     }
 }
