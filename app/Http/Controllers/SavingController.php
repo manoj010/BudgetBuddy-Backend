@@ -70,6 +70,11 @@ class SavingController extends BaseController
     public function update(SavingRequest $request, Saving $saving)
     {
         $this->checkOwnership($saving);
+
+        if ($response = $this->checkMonth($saving)) {
+            return $response;
+        }
+
         try {
             DB::beginTransaction();
             $prevAmount = $saving->amount;
@@ -94,6 +99,11 @@ class SavingController extends BaseController
     public function destroy(Saving $saving)
     {
         $this->checkOwnership($saving);
+
+        if ($response = $this->checkMonth($saving)) {
+            return $response;
+        }
+        
         try {
             DB::beginTransaction();
 

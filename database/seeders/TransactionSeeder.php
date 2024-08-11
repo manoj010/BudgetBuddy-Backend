@@ -14,16 +14,22 @@ class TransactionSeeder extends Seeder
         $expenseCategories = DB::table('expense_categories')->pluck('id')->toArray();
         $userBalances = [];
 
+        $currentDate = Carbon::now();
+        $currentDay = $currentDate->day;
+        $currentMonth = $currentDate->month;
+
         foreach (range(1, 8) as $month) {
             $totalIncome = 0;
             $totalExpense = 0;
 
+            $daysInMonth = $month === $currentMonth ? $currentDay : Carbon::create(2024, $month)->daysInMonth;
+
             for ($i = 0; $i < 8; $i++) {
-                $incomeDate = Carbon::create(2024, $month, rand(1, Carbon::create(2024, $month)->daysInMonth))
+                $incomeDate = Carbon::create(2024, $month, rand(1, $daysInMonth))
                     ->setTime(rand(0, 23), rand(0, 59), rand(0, 59))
                     ->format('Y-m-d H:i:s');
 
-                $expenseDate = Carbon::create(2024, $month, rand(1, Carbon::create(2024, $month)->daysInMonth))
+                $expenseDate = Carbon::create(2024, $month, rand(1, $daysInMonth))
                     ->setTime(rand(0, 23), rand(0, 59), rand(0, 59))
                     ->format('Y-m-d H:i:s');
 
@@ -102,6 +108,10 @@ class TransactionSeeder extends Seeder
             $totalSaving = 0;
             $totalWithdraw = 0;
 
+            $userBalances[$month] = [
+                'closing_balance' => $closingBalance
+            ];
+
             DB::table('user_balances')->insert([
                 'month' => Carbon::create(2024, $month, 1)->format('Y-m-d'),
                 'opening_balance' => $openingBalance,
@@ -112,12 +122,10 @@ class TransactionSeeder extends Seeder
                 'total_withdraw' => $totalWithdraw,
                 'created_by' => 1,
                 'created_at' => Carbon::create(2024, $month, 1)->startOfDay()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::create(2024, $month, 1)->endOfMonth()->format('Y-m-d H:i:s'),
+                'updated_at' => $month === $currentMonth 
+                                ? Carbon::create(2024, $month, $currentDay)->endOfDay()->format('Y-m-d H:i:s')
+                                : Carbon::create(2024, $month, 1)->endOfMonth()->format('Y-m-d H:i:s'),
             ]);
-
-            $userBalances[$month] = [
-                'closing_balance' => $closingBalance
-            ];
         }
     }
 }

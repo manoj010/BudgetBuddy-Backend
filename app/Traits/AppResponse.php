@@ -54,4 +54,17 @@ trait AppResponse
             'errors' => $validator->errors()
         ], Response::HTTP_UNPROCESSABLE_ENTITY));
     }
+
+    protected function checkMonth($resource, $message = 'Permission Denied.', $status = Response::HTTP_FORBIDDEN)
+    {
+        $currentMonth = date('m');
+        $resourceMonth = $resource->created_at->format('m');
+        if ($resourceMonth !== $currentMonth) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $message
+            ], $status);
+        }
+        return null;
+    }
 }

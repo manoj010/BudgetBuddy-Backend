@@ -21,7 +21,7 @@ class AuthController extends BaseController
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $tokenExpiration = Carbon::now()->addHours(1);
+            $tokenExpiration = Carbon::now()->addHours(10);
             Passport::personalAccessTokensExpireIn($tokenExpiration);
             $token = $user->createToken('userToken')->accessToken;
             $expirationTimestamp = $tokenExpiration->timestamp;

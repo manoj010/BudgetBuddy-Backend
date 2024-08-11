@@ -69,6 +69,11 @@ class IncomeController extends BaseController
     public function update(IncomeRequest $request, Income $income)
     {
         $this->checkOwnership($income);
+
+        if ($response = $this->checkMonth($income)) {
+            return $response;
+        }
+
         try {
             DB::beginTransaction();
 
@@ -94,6 +99,11 @@ class IncomeController extends BaseController
     public function destroy(Income $income)
     {
         $this->checkOwnership($income);
+
+        if ($response = $this->checkMonth($income)) {
+            return $response;
+        }
+        
         try {
             DB::beginTransaction();
 

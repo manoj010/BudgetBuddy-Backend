@@ -71,6 +71,11 @@ class WithdrawController extends BaseController
     public function update(WithdrawRequest $request, Withdraw $withdraw)
     {
         $this->checkOwnership($withdraw);
+
+        if ($response = $this->checkMonth($withdraw)) {
+            return $response;
+        }
+
         try {
             DB::beginTransaction();
             $prevAmount = $withdraw->amount;
@@ -96,6 +101,11 @@ class WithdrawController extends BaseController
     public function destroy(Withdraw $withdraw)
     {
         $this->checkOwnership($withdraw);
+
+        if ($response = $this->checkMonth($withdraw)) {
+            return $response;
+        }
+        
         try {
             DB::beginTransaction();
 

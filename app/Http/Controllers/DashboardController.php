@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DashboardResource;
+use App\Models\Expense;
+use App\Models\Income;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,7 +14,10 @@ class DashboardController extends BaseController
 {
     public function overview()
     {
-        $currentMonth = Carbon::now()->format('Y-m');
+        $user = Auth::user();
+        $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->month;
+        $currentMonthData = Carbon::now()->format('Y-m');
         $previousMonth = Carbon::now()->subMonth()->format('Y-m');
 
         $goal = DB::table('saving_goals')
@@ -20,7 +26,7 @@ class DashboardController extends BaseController
 
         $currentMonthSummary = DB::table('user_balances')
             ->where('created_by', auth()->id())
-            ->where('created_at', 'like', $currentMonth . '%')
+            ->where('created_at', 'like', $currentMonthData . '%')
             ->first();
 
         $previousMonthSummary = DB::table('user_balances')
@@ -59,12 +65,37 @@ class DashboardController extends BaseController
             'total_saving' => round($percentageChanges['total_saving']),
         ];
 
+        $incomeData = $this->getMonthlyData(Income::class, 'total_income', $user->id, $currentYear, $currentMonth);
+        $expenseData = $this->getMonthlyData(Expense::class, 'total_expense', $user->id, $currentYear, $currentMonth);
+
         $response = [
-            'current_month' => new DashboardResource($currentMonthSummary),
-            'percentage_changes' => $percentageChanges,
-            'goal' => $goal
+            'financial_data' => [           
+                'current_month' => new DashboardResource($currentMonthSummary),
+                'percentage_changes' => $percentageChanges,
+                'current_month_goal' => $goal,
+            ],
+            'charts_data' => [
+                'income_data' => $incomeData,
+                'expense_data' => $expenseData
+            ]
         ];
 
         return $this->success($response, 'Summary', Response::HTTP_OK);
+    }
+
+    private function getMonthlyData($model, $columnAlias, $userId, $year, $month)
+    {
+        $monthlyData = $model::selectRaw('EXTRACT(MONTH FROM created_at) as month, SUM(amount) as ' . $columnAlias)
+            ->where('created_by', $userId)
+            ->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [$year])
+            ->whereRaw('EXTRACT(MONTH FROM created_at) <= ?', [$month])
+            ->groupBy('month')
+            ->get();
+
+        $data = array_fill(0, $month, 0);
+        foreach ($monthlyData as $item) {
+            $data[$item->month - 1] = $item->$columnAlias;
+        }
+        return $data;
     }
 }

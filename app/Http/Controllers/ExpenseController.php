@@ -69,6 +69,11 @@ class ExpenseController extends BaseController
     public function update(ExpenseRequest $request, Expense $expense)
     {
         $this->checkOwnership($expense);
+
+        if ($response = $this->checkMonth($expense)) {
+            return $response;
+        }
+
         try {
             DB::beginTransaction();
             $prevAmount = $expense->amount;
@@ -93,6 +98,11 @@ class ExpenseController extends BaseController
     public function destroy(Expense $expense)
     {
         $this->checkOwnership($expense);
+        
+        if ($response = $this->checkMonth($expense)) {
+            return $response;
+        }
+
         try {
             DB::beginTransaction();
 

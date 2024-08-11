@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeCategoryController;
@@ -9,6 +8,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoanCategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DropdownController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingGoalController;
 use App\Http\Controllers\TransactionController;
@@ -61,9 +61,8 @@ Route::middleware('auth:api')->prefix('dashboard')->group(function () {
     Route::get('/overview', [DashboardController::class, 'overview']);
 });
 
-Route::middleware('auth:api')->prefix('charts')->group(function () {
-    Route::get('/monthly-data', [ChartController::class, 'monthlyData']);
-    // Route::get('/by-category', [ChartController::class, 'byCategory']);
+Route::middleware('auth:api')->prefix('reports')->group(function () {
+    Route::get('/report', [ReportController::class, 'monthlyData']);
 });
 
 Route::middleware('auth:api')->prefix('dropdown')->group(function () {

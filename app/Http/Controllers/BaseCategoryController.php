@@ -25,7 +25,8 @@ class BaseCategoryController extends BaseController
     protected function allResource(Model $resource)
     {
         $allResource = $resource->where('created_by', auth()->id())->get();
-        return $this->success(new BaseCategoryCollection($allResource), 'All Category Data', Response::HTTP_OK);
+        $sortedData = $allResource->sortByDesc('created_at')->values();
+        return $this->success(new BaseCategoryCollection($sortedData), 'All Category Data', Response::HTTP_OK);
     }
 
     protected function specificResource(Model $resource, $id)
