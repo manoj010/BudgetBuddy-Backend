@@ -12,14 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory()->create([
-        //     'id' => 0,
-        //     'username' => 'default',
-        //     'email' => 'default@example.com',
-        //     'password' => bcrypt('12345678'),
-        // ]);
         $this->call([
-            UserBalancesSeeder::class,
             TransactionSeeder::class,
         ]);
     }
