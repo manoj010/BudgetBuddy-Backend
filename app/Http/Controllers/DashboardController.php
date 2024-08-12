@@ -44,7 +44,7 @@ class DashboardController extends BaseController
                 $previousValue = $previousMonthSummary->$field;
 
                 if ($previousValue != 0) {
-                    $percentageChange = (($currentValue - $previousValue) / $previousValue) * 100;
+                    $percentageChange = (($currentValue - $previousValue) / abs($previousValue)) * 100;
                 } else {
                     $percentageChange = ($currentValue != 0) ? 100 : 0;
                 }
@@ -71,6 +71,7 @@ class DashboardController extends BaseController
         $response = [
             'financial_data' => [           
                 'current_month' => new DashboardResource($currentMonthSummary),
+                // 'previous_month' => new DashboardResource($previousMonthSummary),
                 'percentage_changes' => $percentageChanges,
                 'current_month_goal' => $goal,
             ],

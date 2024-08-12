@@ -2,29 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use App\Models\{Expense, Income, Saving, Withdraw};
 
 class TransactionController extends BaseController
 {
-    public function getTransactions(Request $request)
-    {
-        $user = Auth::user();
+    public function getTransactions(FilterRequest $request)
+    {        
+        $incomes = Income::query();
+        $expenses = Expense::query();
+        $savings = Saving::query();
+        $withdraws = Withdraw::query();
 
-        $fromDate = $request->input('from_date');
-        $toDate = $request->input('to_date');
-        $filter = $request->input('filter'); 
-        
-        $incomes = Income::where('created_by', $user->id);
-        $expenses = Expense::where('created_by', $user->id);
-        $savings = Saving::where('created_by', $user->id);
-        $withdraws = Withdraw::where('created_by', $user->id);
-
-        $incomes = $this->dateFilters($incomes, $fromDate, $toDate, $filter);
-        $expenses = $this->dateFilters($expenses, $fromDate, $toDate, $filter);
-        $savings = $this->dateFilters($savings, $fromDate, $toDate, $filter);
-        $withdraws = $this->dateFilters($withdraws, $fromDate, $toDate, $filter);
+        $incomes = $request->filterDate($incomes);
+        $expenses = $request->filterDate($expenses);
+        $savings = $request->filterDate($savings);
+        $withdraws = $request->filterDate($withdraws);
 
         $incomes = $incomes->get();
         $expenses = $expenses->get();
