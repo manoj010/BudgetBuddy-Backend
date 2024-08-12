@@ -58,8 +58,10 @@ trait AppResponse
     protected function checkMonth($resource, $message = 'Permission Denied.', $status = Response::HTTP_FORBIDDEN)
     {
         $currentMonth = date('m');
+        $currentDate = date('d');
         $resourceMonth = $resource->created_at->format('m');
-        if ($resourceMonth !== $currentMonth) {
+        $resourceDate = $resource->created_at->format('d');
+        if ($resourceMonth !== $currentMonth || ($resourceMonth == $currentMonth && $resourceDate > $currentDate)) {
             return response()->json([
                 'status' => 'error',
                 'message' => $message

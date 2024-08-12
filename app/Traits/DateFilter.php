@@ -18,6 +18,8 @@ trait DateFilter
             $query->whereBetween('created_at', [$startOfWeek, $endOfWeek]);
         } elseif ($fromDate && $toDate) {
             $query->whereBetween('created_at', [$fromDate, $toDate]);
+        } elseif ($filter === 'today') {
+            $query->whereDate('created_at', Carbon::today());
         }
         return $query;
     }

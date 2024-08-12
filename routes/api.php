@@ -61,10 +61,6 @@ Route::middleware('auth:api')->prefix('dashboard')->group(function () {
     Route::get('/overview', [DashboardController::class, 'overview']);
 });
 
-Route::middleware('auth:api')->prefix('reports')->group(function () {
-    Route::get('/report', [ReportController::class, 'monthlyData']);
-});
-
 Route::middleware('auth:api')->prefix('dropdown')->group(function () {
     Route::get('/category/{slug}', [DropdownController::class, 'getCategory']);
 });
