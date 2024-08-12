@@ -22,6 +22,7 @@ class DashboardController extends BaseController
 
         $goal = DB::table('saving_goals')
             ->where('created_by', auth()->id())
+            ->where('archived_at', null)
             ->value('target_amount');
 
         $currentMonthSummary = DB::table('user_balances')

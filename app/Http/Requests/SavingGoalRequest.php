@@ -30,10 +30,12 @@ class SavingGoalRequest extends FormRequest
                 'nullable',
                 'date',
                 Rule::unique('saving_goals')
+                    ->ignore($this->saving_goal)
                     ->where(function ($query) {
                         return $query->where('created_by', $this->user()->id)
                                      ->whereMonth('for_month', Carbon::now()->month)
-                                     ->whereYear('for_month', Carbon::now()->year);
+                                     ->whereYear('for_month', Carbon::now()->year)
+                                     ->whereNull('archived_at');
                     })
             ],
             'target_amount' => 'required|numeric|min:0',

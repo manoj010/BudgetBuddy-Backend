@@ -6,6 +6,7 @@ use App\Http\Requests\SavingGoalRequest;
 use App\Http\Resources\SavingGoalCollection;
 use App\Http\Resources\SavingGoalResource;
 use App\Models\SavingGoal;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class SavingGoalController extends BaseController
@@ -31,6 +32,37 @@ class SavingGoalController extends BaseController
             return $this->success(new SavingGoalResource($savingGoal), 'Saving Goal Added Successfully', Response::HTTP_OK);
         } catch (\Exception $e) {
             return $this->error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function update(SavingGoalRequest $request, SavingGoal $savingGoal)
+    {
+        $this->checkOwnership($savingGoal);
+
+        try {
+            DB::beginTransaction();
+            $request->validated();
+            $savingGoal->update($request->validated());
+            DB::commit();
+            return $this->success(new SavingGoalResource($savingGoal), 'Goal updated Successfully', Response::HTTP_OK);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($e);
+        }
+    }
+
+    public function destroy(SavingGoal $savingGoal)
+    {
+        $this->checkOwnership($savingGoal);
+
+        try {
+            DB::beginTransaction();
+            $savingGoal->delete();
+            DB::commit();
+            return $this->success('Goal Deleted Successfully', Response::HTTP_OK);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($e);
         }
     }
 }
