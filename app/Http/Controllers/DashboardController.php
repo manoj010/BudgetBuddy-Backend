@@ -20,6 +20,8 @@ class DashboardController extends BaseController
         $currentMonthData = Carbon::now()->format('Y-m');
         $previousMonth = Carbon::now()->subMonth()->format('Y-m');
 
+        $username = $user->username;
+
         $goal = DB::table('saving_goals')
             ->where('created_by', auth()->id())
             ->where('archived_at', null)
@@ -79,7 +81,8 @@ class DashboardController extends BaseController
             'charts_data' => [
                 'income_data' => $incomeData,
                 'expense_data' => $expenseData
-            ]
+            ],
+            'username' => $username
         ];
 
         return $this->success($response, 'Summary', Response::HTTP_OK);
