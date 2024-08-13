@@ -45,6 +45,8 @@ class SavingController extends BaseController
             }
 
             $save = $this->saving::create($validatedData);
+
+            $balance->saving_balance += $save->amount;
             $balance->total_saving += $save->amount;
             $balance->closing_balance -= $save->amount;
             $balance->save();

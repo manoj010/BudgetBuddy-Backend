@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BalanceReport;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeCategoryController;
@@ -8,11 +9,9 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoanCategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DropdownController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingGoalController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\UserBalanceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
@@ -54,7 +53,6 @@ Route::middleware('auth:api')->prefix('transaction')->group(function () {
     Route::apiResource('saving', SavingController::class);
     Route::apiResource('saving-goal', SavingGoalController::class);
     Route::apiResource('withdraw', WithdrawController::class);
-    Route::apiResource('balance', UserBalanceController::class);
 });
 
 Route::middleware('auth:api')->prefix('dashboard')->group(function () {
@@ -63,4 +61,9 @@ Route::middleware('auth:api')->prefix('dashboard')->group(function () {
 
 Route::middleware('auth:api')->prefix('dropdown')->group(function () {
     Route::get('/category/{slug}', [DropdownController::class, 'getCategory']);
+});
+
+Route::middleware('auth:api')->prefix('reports')->group(function () {
+    Route::get('/balance', [BalanceReport::class, 'allData']);
+    Route::get('/balance/overview', [BalanceReport::class, 'overview']);
 });

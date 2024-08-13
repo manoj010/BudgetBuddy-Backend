@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DashboardResource;
-use App\Models\Expense;
-use App\Models\Income;
+use App\Models\UserBalance;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -68,8 +67,8 @@ class DashboardController extends BaseController
             'total_saving' => round($percentageChanges['total_saving']),
         ];
 
-        $incomeData = $this->getMonthlyData(Income::class, 'total_income', $user->id, $currentYear, $currentMonth);
-        $expenseData = $this->getMonthlyData(Expense::class, 'total_expense', $user->id, $currentYear, $currentMonth);
+        $incomeData = $this->getMonthlyData(UserBalance::class, 'total_income', $user->id, $currentYear, $currentMonth);
+        $expenseData = $this->getMonthlyData(UserBalance::class, 'total_expense', $user->id, $currentYear, $currentMonth);
 
         $response = [
             'financial_data' => [           
@@ -86,21 +85,5 @@ class DashboardController extends BaseController
         ];
 
         return $this->success($response, 'Summary', Response::HTTP_OK);
-    }
-
-    private function getMonthlyData($model, $columnAlias, $userId, $year, $month)
-    {
-        $monthlyData = $model::selectRaw('EXTRACT(MONTH FROM created_at) as month, SUM(amount) as ' . $columnAlias)
-            ->where('created_by', $userId)
-            ->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [$year])
-            ->whereRaw('EXTRACT(MONTH FROM created_at) <= ?', [$month])
-            ->groupBy('month')
-            ->get();
-
-        $data = array_fill(0, $month, 0);
-        foreach ($monthlyData as $item) {
-            $data[$item->month - 1] = $item->$columnAlias;
-        }
-        return $data;
     }
 }

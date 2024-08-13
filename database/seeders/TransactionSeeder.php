@@ -28,6 +28,7 @@ class TransactionSeeder extends Seeder
             // Initialize opening balance and total saving from previous month
             $openingBalance = $userBalances[$month-1]['closing_balance'] ?? 0;
             $totalSaving = $userBalances[$month-1]['total_saving'] ?? 0;
+            $savingBalance = $userBalances[$month-1]['total_saving'] ?? 0;
             $closingBalance = $openingBalance;
 
             for ($i = 0; $i < 8; $i++) {
@@ -93,12 +94,13 @@ class TransactionSeeder extends Seeder
                         'updated_at' => $savingDate,
                         'created_by' => 1,
                     ]);
+                    $savingBalance += $savingAmount;
                     $totalSaving += $savingAmount;
                     $closingBalance -= $savingAmount;
                 }
 
                 // Handle withdrawals
-                if ($totalSaving > 0 && rand(0, 1)) {
+                if ($totalSaving >= 0 && rand(0, 1)) {
                     $withdrawAmount = rand(100, $totalSaving);
                     $withdrawDate = Carbon::create(2024, $month, rand(1, $daysInMonth))
                         ->setTime(rand(0, 23), rand(0, 59), rand(0, 59))
@@ -131,6 +133,7 @@ class TransactionSeeder extends Seeder
                 'closing_balance' => $closingBalance,
                 'total_income' => $totalIncome,
                 'total_expense' => $totalExpense,
+                'saving_balance' => $savingBalance,
                 'total_saving' => $totalSaving,
                 'total_withdraw' => $totalWithdraw,
                 'created_by' => 1,

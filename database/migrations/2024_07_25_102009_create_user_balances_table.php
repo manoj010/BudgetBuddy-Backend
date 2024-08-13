@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('closing_balance', 10, 2)->default(0);
             $table->decimal('total_income', 10, 2)->default(0);
             $table->decimal('total_expense', 10, 2)->default(0);
+            $table->decimal('saving_balance', 10, 2)->default(0);
             $table->decimal('total_saving', 10, 2)->default(0);
             $table->decimal('total_withdraw', 10, 2)->default(0);
             $table->defaultInfos();
