@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterRequest;
 use App\Http\Requests\IncomeRequest;
 use App\Http\Resources\{IncomeCollection, IncomeResource};
 use App\Models\{Income};
@@ -20,11 +21,10 @@ class IncomeController extends BaseController
         $this->balanceService = $balanceService;
     }
 
-    public function index()
+    public function index(FilterRequest $request)
     {
-        $income = $this->income->where('created_by', auth()->id())->get();
-        $sortedData = $income->sortByDesc('created_at')->values();
-        return $this->success(new IncomeCollection($sortedData), 'All Income');
+        $income = $this->getFilteredDate($request, $this->income);
+        return $this->success(new IncomeCollection($income), 'All Income');
     }
 
     public function store(IncomeRequest $request)

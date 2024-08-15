@@ -12,17 +12,23 @@ class DropdownController extends BaseController
 {
     public function getCategory($slug)
     {
-        if($slug == 'income-category') {
-            $incomeCategory = IncomeCategory::where('created_by', auth()->id())->where('status', true)->get();
-            return $this->success(new BaseCategoryCollection($incomeCategory), 'All Income Category Data', Response::HTTP_OK);
-        } elseif($slug == 'expense-category') {
-            $expenseCategory = ExpenseCategory::where('created_by', auth()->id())->where('status', true)->get();
-            return $this->success(new BaseCategoryCollection($expenseCategory), 'All Expense Category Data', Response::HTTP_OK);
-        } elseif($slug == 'loan-category') {
-            $loanCategory = LoanCategory::where('created_by', auth()->id())->where('status', true)->get();
-            return $this->success(new BaseCategoryCollection($loanCategory), 'All Loan Category Data', Response::HTTP_OK);
-        } else {
-            return $this->error('Invalid Category.');
+        $models = [
+            'income-category' => IncomeCategory::class,
+            'expense-category' => ExpenseCategory::class,
+            'loan-category' => LoanCategory::class,
+        ];
+
+        if (isset($models[$slug])) {
+            $model = $models[$slug];
+            $categories = $model::where('created_by', auth()->id())
+                ->where('status', true)
+                ->get();
+            
+            $sortedData = $categories->sortByDesc('created_at')->values();
+
+            return $this->success(new BaseCategoryCollection($sortedData), "All {$slug} Data", Response::HTTP_OK);
         }
+
+        return $this->error('Invalid Category.', Response::HTTP_BAD_REQUEST);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterRequest;
 use App\Http\Resources\{BaseCategoryCollection, BaseCategoryResource};
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -22,11 +23,10 @@ class BaseCategoryController extends BaseController
         }
     }
 
-    protected function allResource(Model $resource)
+    protected function allResource($request, Model $resource)
     {
-        $allResource = $resource->where('created_by', auth()->id())->get();
-        $sortedData = $allResource->sortByDesc('created_at')->values();
-        return $this->success(new BaseCategoryCollection($sortedData), 'All Category Data', Response::HTTP_OK);
+        $allResource = $this->getFilteredCategory($request, $resource);
+        return $this->success(new BaseCategoryCollection($allResource), 'All Category Data', Response::HTTP_OK);
     }
 
     protected function specificResource(Model $resource, $id)

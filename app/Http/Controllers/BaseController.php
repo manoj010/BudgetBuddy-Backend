@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Traits\AppResponse;
+use App\Traits\CategoryFilter;
 use App\Traits\DateFilter;
 use App\Traits\DefaultCategories;
 
 class BaseController extends Controller
 {
-    use AppResponse, DefaultCategories, DateFilter;
+    use AppResponse, DefaultCategories, DateFilter, CategoryFilter;
 
     public function getMonthlyData($model, $column, $userId, $year, $month)
     {
@@ -22,6 +23,20 @@ class BaseController extends Controller
         foreach ($monthlyData as $item) {
             $data[$item->month - 1] = $item->total;
         }
+        return $data;
+    }
+
+    public function getFilteredDate($request, $model)
+    {
+        $query = $model::query();
+        $data = $request->filterDate($query)->orderByDesc('created_at')->get();
+        return $data;
+    }
+
+    public function getFilteredCategory($request, $model)
+    {
+        $query = $model::query();
+        $data = $request->categoryFilter($query)->orderByDesc('created_at')->get();
         return $data;
     }
 }

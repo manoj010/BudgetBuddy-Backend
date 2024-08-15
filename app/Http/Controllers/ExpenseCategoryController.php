@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ExpenseCategoryRequest;
+use App\Http\Requests\FilterRequest;
 use App\Models\ExpenseCategory;
 
 class ExpenseCategoryController extends BaseCategoryController
@@ -14,9 +15,9 @@ class ExpenseCategoryController extends BaseCategoryController
         $this->expenseCategory = $expenseCategory;
     }
 
-    public function index()
+    public function index(FilterRequest $request)
     {
-        return $this->allResource($this->expenseCategory);
+        return $this->allResource($request, $this->expenseCategory);
     }
     
     public function store(ExpenseCategoryRequest $request)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterRequest;
 use App\Http\Requests\LoanCategoryRequest;
 use App\Models\LoanCategory;
 
@@ -14,9 +15,9 @@ class LoanCategoryController extends BaseCategoryController
         $this->loanCategory = $loanCategory;
     }
 
-    public function index()
+    public function index(FilterRequest $request)
     {
-        return $this->allResource($this->loanCategory);
+        return $this->allResource($request, $this->loanCategory);
     }
     
     public function store(LoanCategoryRequest $request)

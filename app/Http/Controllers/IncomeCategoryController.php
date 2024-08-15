@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterRequest;
 use App\Http\Requests\IncomeCategoryRequest;
 use App\Models\IncomeCategory;
 
@@ -14,9 +15,9 @@ class IncomeCategoryController extends BaseCategoryController
         $this->incomeCategory = $incomeCategory;
     }
 
-    public function index()
+    public function index(FilterRequest $request)
     {
-        return $this->allResource($this->incomeCategory);
+        return $this->allResource($request, $this->incomeCategory);
     }
     
     public function store(IncomeCategoryRequest $request)

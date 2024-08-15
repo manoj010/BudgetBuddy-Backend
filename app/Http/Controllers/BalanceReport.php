@@ -33,7 +33,7 @@ class BalanceReport extends BaseController
         $closingBalance = $this->getMonthlyData(UserBalance::class, 'closing_balance', $user->id, $currentYear, $currentMonth);
 
         $response = [
-            'balance' => [
+            'balance_chart' => [
                 'opening_balance' => $openingBalance,
                 'closing_balance' => $closingBalance,
             ],

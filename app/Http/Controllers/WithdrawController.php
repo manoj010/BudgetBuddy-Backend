@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterRequest;
 use App\Http\Requests\WithdrawRequest;
 use App\Http\Resources\{WithdrawCollection, WithdrawResource};
 use App\Models\Withdraw;
@@ -19,12 +20,11 @@ class WithdrawController extends BaseController
         $this->withdraw = $withdraw;
         $this->balanceService = $balanceService;
     }
-
-    public function index()
+    
+    public function index(FilterRequest $request)
     {
-        $withdraw = $this->withdraw->where('created_by', auth()->id())->get();
-        $sortedData = $withdraw->sortByDesc('created_at')->values();
-        return $this->success(new WithdrawCollection($sortedData), 'All Withdraw');
+        $withdraw = $this->getFilteredDate($request, $this->withdraw);
+        return $this->success(new WithdrawCollection($withdraw), 'All Withdraw');
     }
 
     public function store(WithdrawRequest $request)

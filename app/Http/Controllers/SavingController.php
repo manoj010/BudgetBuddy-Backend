@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterRequest;
 use App\Http\Requests\SavingRequest;
 use App\Http\Resources\{SavingCollection, SavingResource};
 use App\Models\Saving;
@@ -19,12 +20,11 @@ class SavingController extends BaseController
         $this->saving = $saving;
         $this->balanceService = $balanceService;
     }
-
-    public function index()
+    
+    public function index(FilterRequest $request)
     {
-        $saving = $this->saving->where('created_by', auth()->id())->get();
-        $sortedData = $saving->sortByDesc('created_at')->values();
-        return $this->success(new SavingCollection($sortedData), 'All Saving');
+        $saving = $this->getFilteredDate($request, $this->saving);
+        return $this->success(new SavingCollection($saving), 'All Saving');
     }
 
     public function store(SavingRequest $request)

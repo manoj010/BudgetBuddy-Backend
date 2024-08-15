@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ExpenseRequest;
+use App\Http\Requests\FilterRequest;
 use App\Http\Resources\{ExpenseCollection, ExpenseResource};
 use App\Models\Expense;
 use App\Services\BalanceService;
@@ -19,12 +20,11 @@ class ExpenseController extends BaseController
         $this->expense = $expense;
         $this->balanceService = $balanceService;
     }
-
-    public function index()
+    
+    public function index(FilterRequest $request)
     {
-        $expense = $this->expense->where('created_by', auth()->id())->get();
-        $sortedData = $expense->sortByDesc('created_at')->values();
-        return $this->success(new ExpenseCollection($sortedData), 'All Expense');
+        $expense = $this->getFilteredDate($request, $this->expense);
+        return $this->success(new ExpenseCollection($expense), 'All Expense');
     }
 
     public function store(ExpenseRequest $request)
