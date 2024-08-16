@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BalanceReport;
+use App\Http\Controllers\BalanceReportController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeCategoryController;
@@ -64,6 +64,6 @@ Route::middleware('auth:api')->prefix('dropdown')->group(function () {
 });
 
 Route::middleware('auth:api')->prefix('reports')->group(function () {
-    Route::get('/balance', [BalanceReport::class, 'allData']);
-    Route::get('/balance/overview', [BalanceReport::class, 'overview']);
+    Route::get('/balance', [BalanceReportController::class, 'allData']);
+    Route::get('/balance/overview', [BalanceReportController::class, 'overview']);
 });

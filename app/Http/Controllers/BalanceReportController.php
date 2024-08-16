@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class BalanceReport extends BaseController
+class BalanceReportController extends BaseController
 {
     protected $userBalance;
 
