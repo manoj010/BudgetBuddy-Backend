@@ -41,4 +41,6 @@ class BalanceReportController extends BaseController
 
         return $this->success($response, 'Summary', Response::HTTP_OK);
     }
+
+    
 }
