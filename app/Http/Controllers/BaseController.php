@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Traits\AppResponse;
 use App\Traits\CategoryFilter;
+use App\Traits\CustomPagination;
 use App\Traits\DateFilter;
 use App\Traits\DefaultCategories;
+use Symfony\Component\HttpFoundation\Response;
 
 class BaseController extends Controller
 {
-    use AppResponse, DefaultCategories, DateFilter, CategoryFilter;
+    use AppResponse, DefaultCategories, DateFilter, CategoryFilter, CustomPagination;
 
     public function getMonthlyData($model, $column, $userId, $year, $month)
     {
@@ -38,5 +40,21 @@ class BaseController extends Controller
         $query = $model::query();
         $data = $request->categoryFilter($query)->orderByDesc('created_at')->get();
         return $data;
+    }
+
+    protected function checkMonth($resource, $message = 'Permission Denied.', $status = Response::HTTP_FORBIDDEN)
+    {
+        $currentMonth = date('m');
+        $currentDate = date('d');
+        $resourceMonth = $resource->created_at->format('m');
+        $resourceDate = $resource->created_at->format('d');
+        if ($resourceMonth !== $currentMonth || ($resourceMonth == $currentMonth && $resourceDate > $currentDate)) {
+            return response()->json([
+                'status' => 'error',
+                'code' => $status,
+                'message' => $message
+            ], $status);
+        }
+        return null;
     }
 }

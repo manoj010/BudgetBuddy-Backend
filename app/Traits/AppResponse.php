@@ -5,6 +5,8 @@ namespace App\Traits;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Collection;
+use App\Traits\CustomPagination;
 
 trait AppResponse
 {
@@ -12,16 +14,32 @@ trait AppResponse
     {
         return response()->json([
             'status' => 'success',
-            'data' => $data,
-            'message' => $message
+            'code' => $status,
+            'message' => $message,
+            'data' => $data
         ], $status);
     }
+
+    // protected function success($data, $message = '', $status = Response::HTTP_OK, ?int $perPage = null)
+    // {
+    //     if ($perPage !== null) {
+    //         $data = $this->paginate($data, $perPage);
+    //     }
+        
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'code' => $status,
+    //         'message' => $message,
+    //         'data' => $data
+    //     ], $status);
+    // }
 
     protected function error($e, $status = Response::HTTP_INTERNAL_SERVER_ERROR)
     {
         return response()->json([
             'status' => 'error',
-            'message' => 'An error occurred: ' . $e,
+            'code' => $status,
+            'message' => 'An error occurred: ' . $e
         ], $status);
     }
     
@@ -31,6 +49,7 @@ trait AppResponse
         if ($resource->created_by !== $user->id) {
             return response()->json([
                 'status' => 'error',
+                'code' => $status,
                 'message' => $message
             ], $status);
         }
@@ -41,6 +60,7 @@ trait AppResponse
     {
         return response()->json([
             'status' => 'error', 
+            'code' => $status,
             'message' => 'Resource not Found'
         ], $status);
         return null;
@@ -53,20 +73,5 @@ trait AppResponse
             'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
             'errors' => $validator->errors()
         ], Response::HTTP_UNPROCESSABLE_ENTITY));
-    }
-
-    protected function checkMonth($resource, $message = 'Permission Denied.', $status = Response::HTTP_FORBIDDEN)
-    {
-        $currentMonth = date('m');
-        $currentDate = date('d');
-        $resourceMonth = $resource->created_at->format('m');
-        $resourceDate = $resource->created_at->format('d');
-        if ($resourceMonth !== $currentMonth || ($resourceMonth == $currentMonth && $resourceDate > $currentDate)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $message
-            ], $status);
-        }
-        return null;
     }
 }

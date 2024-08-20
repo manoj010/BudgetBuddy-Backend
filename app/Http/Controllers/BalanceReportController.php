@@ -19,7 +19,7 @@ class BalanceReportController extends BaseController
 
     public function allData()
     {
-        $userBalance = $this->userBalance->where('created_by', auth()->id())->get();
+        $userBalance = $this->userBalance->where('created_by', auth()->id())->paginate(10);
         return $this->success(new UserBalanceCollection($userBalance), 'User Balance');
     }
 
@@ -37,7 +37,7 @@ class BalanceReportController extends BaseController
                 'opening_balance' => $openingBalance,
                 'closing_balance' => $closingBalance,
             ],
-        ];
+        ]; 
 
         return $this->success($response, 'Summary', Response::HTTP_OK);
     }
