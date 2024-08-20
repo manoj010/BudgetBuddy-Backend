@@ -24,7 +24,6 @@ class FilterRequest extends FormRequest
         return [
             'from_date' => 'nullable|date',
             'to_date' => 'nullable|date',
-            'filter' => 'nullable|string',
         ];
     }
 }

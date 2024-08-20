@@ -19,8 +19,8 @@ class BalanceReportController extends BaseController
 
     public function allData()
     {
-        $userBalance = $this->userBalance->where('created_by', auth()->id())->paginate(10);
-        return $this->success(new UserBalanceCollection($userBalance), 'User Balance');
+        $userBalance = $this->userBalance->where('created_by', auth()->id())->get();
+        return $this->success(new UserBalanceCollection($userBalance), 'User Balance Retrieved');
     }
 
     public function overview()
@@ -28,10 +28,10 @@ class BalanceReportController extends BaseController
         $user = Auth::user();
         $currentYear = Carbon::now()->year;
         $currentMonth = Carbon::now()->month;
-        
+
         $openingBalance = $this->getMonthlyData(UserBalance::class, 'opening_balance', $user->id, $currentYear, $currentMonth);
         $closingBalance = $this->getMonthlyData(UserBalance::class, 'closing_balance', $user->id, $currentYear, $currentMonth);
-
+ 
         $response = [
             'balance_chart' => [
                 'opening_balance' => $openingBalance,
@@ -41,6 +41,5 @@ class BalanceReportController extends BaseController
 
         return $this->success($response, 'Summary', Response::HTTP_OK);
     }
-
-    
 }
+ 
