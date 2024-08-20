@@ -78,8 +78,8 @@ class TransactionController extends BaseController
             ];
         });
 
-        return response()->json($transformedData);
+        // return response()->json($transformedData);
 
-        // return $this->success($transformedData, "Transaction History Retrieved");
+        return $this->success($transformedData, "Transaction History Retrieved");
     }
 }
