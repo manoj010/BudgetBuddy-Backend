@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BalanceReportController;
+use App\Http\Controllers\CashFlowController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeCategoryController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoanCategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DropdownController;
+use App\Http\Controllers\IncomeExpenseReport;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingGoalController;
 use App\Http\Controllers\TransactionController;
@@ -63,7 +65,8 @@ Route::middleware('auth:api')->prefix('dropdown')->group(function () {
     Route::get('/category/{slug}', [DropdownController::class, 'getCategory']);
 });
 
-Route::middleware('auth:api')->prefix('reports')->group(function () {
+Route::middleware('auth:api')->prefix('analytics')->group(function () {
     Route::get('/balance', [BalanceReportController::class, 'allData']);
     Route::get('/balance/overview', [BalanceReportController::class, 'overview']);
+    Route::get('/cash-flow/overview', [CashFlowController::class, 'overview']);
 });
