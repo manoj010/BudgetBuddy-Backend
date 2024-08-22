@@ -31,7 +31,7 @@ class CashFlowController extends BaseController
 
         $top_current_income_category = $this->getCurrentOverallTotals(Income::class, 'income_categories', 'incomes');
         $top_current_expense_category = $this->getCurrentOverallTotals(Expense::class, 'expense_categories', 'expenses');
-        
+
         $current_month_income = Income::whereMonth('created_at', now()->month)->sum('amount');
         $overall_income = Income::sum('amount');
 
@@ -39,14 +39,16 @@ class CashFlowController extends BaseController
         $overall_expense = Expense::sum('amount');
 
         $monthlyIncomeTotals = DB::table('incomes')
-            ->select(DB::raw('EXTRACT(MONTH FROM date_received) as month'), DB::raw('SUM(amount) as amount'))
-            ->groupBy('month')
+            ->select(DB::raw('EXTRACT(YEAR FROM date_received) as year'), DB::raw('EXTRACT(MONTH FROM date_received) as month'), DB::raw('SUM(amount) as amount'))
+            ->groupBy('year', 'month')
+            ->orderBy('year')
             ->orderBy('month')
             ->get();
 
         $monthlyExpenseTotals = DB::table('expenses')
-            ->select(DB::raw('EXTRACT(MONTH FROM date_spent) as month'), DB::raw('SUM(amount) as amount'))
-            ->groupBy('month')
+            ->select(DB::raw('EXTRACT(YEAR FROM date_spent) as year'), DB::raw('EXTRACT(MONTH FROM date_spent) as month'), DB::raw('SUM(amount) as amount'))
+            ->groupBy('year', 'month')
+            ->orderBy('year')
             ->orderBy('month')
             ->get();
 
