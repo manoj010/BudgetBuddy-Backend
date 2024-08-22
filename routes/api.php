@@ -7,10 +7,8 @@ use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeCategoryController;
 use App\Http\Controllers\IncomeController;
-use App\Http\Controllers\LoanCategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DropdownController;
-use App\Http\Controllers\IncomeExpenseReport;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingGoalController;
 use App\Http\Controllers\TransactionController;
@@ -45,7 +43,6 @@ Route::middleware('auth:api')->prefix('user')->group(function () {
 Route::middleware('auth:api')->prefix('setup')->group(function () {
     Route::apiResource('income-category', IncomeCategoryController::class);
     Route::apiResource('expense-category', ExpenseCategoryController::class);
-    Route::apiResource('loan-category', LoanCategoryController::class);
 });
 
 Route::middleware('auth:api')->prefix('transaction')->group(function () {
