@@ -81,7 +81,7 @@ class DashboardController extends BaseController
                 'income_data' => $incomeData,
                 'expense_data' => $expenseData
             ],
-            'username' => $username
+            'username' => $username,
         ];
 
         return $this->success($response, 'Summary', Response::HTTP_OK);
