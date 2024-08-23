@@ -15,7 +15,6 @@ class DropdownController extends BaseController
         $models = [
             'income-category' => IncomeCategory::class,
             'expense-category' => ExpenseCategory::class,
-            'loan-category' => LoanCategory::class,
         ];
 
         if (isset($models[$slug])) {

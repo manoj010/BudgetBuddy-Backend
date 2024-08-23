@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BalanceReportController;
 use App\Http\Controllers\CashFlowController;
+use App\Http\Controllers\CashMovementController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeCategoryController;
@@ -66,4 +67,5 @@ Route::middleware('auth:api')->prefix('analytics')->group(function () {
     Route::get('/balance', [BalanceReportController::class, 'allData']);
     Route::get('/balance/overview', [BalanceReportController::class, 'overview']);
     Route::get('/cash-flow/overview', [CashFlowController::class, 'overview']);
+    Route::get('/cash-movement/overview', [CashMovementController::class, 'overview']);
 });
