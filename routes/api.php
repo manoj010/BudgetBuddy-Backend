@@ -13,6 +13,7 @@ use App\Http\Controllers\DropdownController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingGoalController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserBalanceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,7 @@ Route::middleware('auth:api')->prefix('user')->group(function () {
     Route::get('/profile', [UserController::class, 'index']);
     Route::post('/profile', [UserController::class, 'save']);
     Route::post('/change-password', [UserController::class, 'changePassword']);
+    Route::apiResource('/balance', UserBalanceController::class);
 });
 
 Route::middleware('auth:api')->prefix('setup')->group(function () {
