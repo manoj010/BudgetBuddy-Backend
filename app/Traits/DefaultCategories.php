@@ -38,13 +38,5 @@ trait DefaultCategories
                 'status' => true,
             ]);
         }
-
-        foreach ($loanCategories as $category) {
-            LoanCategory::create([
-                'title' => $category['title'],
-                'description' => $category['description'],
-                'status' => true,
-            ]);
-        }
     }
 }
