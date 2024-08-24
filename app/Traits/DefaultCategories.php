@@ -23,12 +23,6 @@ trait DefaultCategories
             ['title' => 'Utilities', 'description' => 'Expenses for utilities'],
         ];
 
-        $loanCategories = [
-            ['title' => 'Personal Loan', 'description' => 'Loan for personal use'],
-            ['title' => 'Home Loan', 'description' => 'Loan for purchasing a home'],
-            ['title' => 'Car Loan', 'description' => 'Loan for purchasing a car'],
-        ];
-
         foreach ($incomeCategories as $category) {
             IncomeCategory::create([
                 'title' => $category['title'],
