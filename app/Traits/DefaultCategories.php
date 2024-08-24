@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Models\ExpenseCategory;
 use App\Models\IncomeCategory;
-use App\Models\LoanCategory;
 
 trait DefaultCategories
 {
