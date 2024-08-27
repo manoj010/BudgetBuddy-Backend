@@ -17,6 +17,7 @@ use App\Http\Controllers\UserBalanceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,8 @@ Route::middleware('auth:api')->prefix('user')->group(function () {
     Route::post('/profile', [UserController::class, 'save']);
     Route::post('/change-password', [UserController::class, 'changePassword']);
     Route::apiResource('/balance', UserBalanceController::class);
+    Route::post('/upload', [ImageController::class, 'upload']);
+    Route::get('/show/{id}', [ImageController::class, 'show']);
 });
 
 Route::middleware('auth:api')->prefix('setup')->group(function () {
