@@ -1,23 +1,25 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BalanceReportController;
-use App\Http\Controllers\CashFlowController;
-use App\Http\Controllers\CashMovementController;
-use App\Http\Controllers\ExpenseCategoryController;
-use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\IncomeCategoryController;
-use App\Http\Controllers\IncomeController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DropdownController;
-use App\Http\Controllers\SavingController;
-use App\Http\Controllers\SavingGoalController;
-use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\UserBalanceController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\{
+    AuthController, 
+    BalanceReportController, 
+    CashFlowController, 
+    CashMovementController, 
+    DashboardController, 
+    DropdownController, 
+    ExpenseCategoryController, 
+    ExpenseController, 
+    ImageController, 
+    IncomeCategoryController, 
+    IncomeController, 
+    SavingController, 
+    SavingGoalController, 
+    TransactionController, 
+    UserBalanceController, 
+    UserController, 
+    WithdrawController
+};
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------

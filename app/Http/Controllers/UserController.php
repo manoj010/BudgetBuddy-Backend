@@ -7,11 +7,14 @@ use App\Http\Requests\UserProfileRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Traits\UserImage;
 use Illuminate\Support\Facades\{Auth, DB, Hash};
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends BaseController
 {
+    use UserImage;
+
     protected $user;
 
     public function __construct(User $user)
@@ -49,6 +52,16 @@ class UserController extends BaseController
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
+            if ($request->hasFile('image')) {
+                $imageData = $this->imageUpload($request->file('image'));
+
+                if (isset($imageData['error']) && $imageData['error']) {
+                    return $this->error($imageData['message']);
+                }
+
+                $validatedData['image_name'] = $imageData['image_name'];
+                $validatedData['image_path'] = $imageData['image_path'];
+            }
             $user = Auth::guard('api')->user();
             $user->update($validatedData);
             DB::commit();

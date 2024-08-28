@@ -26,6 +26,7 @@ class UserResource extends JsonResource
             'phone_number' => $user->phone_number,
             'dob' => $user->dob,
             'address' => $user->address,
+            'image' => $user->image_path ? asset($user->image_path) : null,
         ];
     }
 }

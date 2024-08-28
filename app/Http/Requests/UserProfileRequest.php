@@ -31,6 +31,7 @@ class UserProfileRequest extends FormRequest
             'phone_number' => 'nullable|digits:10',
             'dob' => 'nullable|date',
             'address' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }
