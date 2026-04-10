@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image as InterventionImage;
+use Intervention\Image\Laravel\Facades\Image as InterventionImage;
 
 class ImageController extends BaseController
 {
@@ -16,7 +16,7 @@ class ImageController extends BaseController
 
         $image = $request->file('image');
 
-        $resizedImage = InterventionImage::make($image)->resize(300, 300);
+        $resizedImage = InterventionImage::decode($image)->resize(300, 300);
 
         $imageName = time() . '.' . $image->getClientOriginalExtension();
 
